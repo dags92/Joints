@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Experior.Catalog.Joints", "Experior.Catalog.Joints.csproj", "{90F407E2-A2E2-4838-AF87-378CDF2309DF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{90F407E2-A2E2-4838-AF87-378CDF2309DF}.Debug|x64.ActiveCfg = Debug|x64
+		{90F407E2-A2E2-4838-AF87-378CDF2309DF}.Debug|x64.Build.0 = Debug|x64
+		{90F407E2-A2E2-4838-AF87-378CDF2309DF}.Release|x64.ActiveCfg = Release|x64
+		{90F407E2-A2E2-4838-AF87-378CDF2309DF}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CCB72A18-95D1-4005-98D4-1FB87ADC049D}
+	EndGlobalSection
+EndGlobal
