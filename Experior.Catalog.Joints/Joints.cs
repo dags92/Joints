@@ -12,6 +12,12 @@ namespace Experior.Catalog.Joints
             Common.Mesh = new Experior.Core.Resources.EmbeddedResourceLoader(System.Reflection.Assembly.GetExecutingAssembly());
             Common.Icon = new Experior.Core.Resources.EmbeddedImageLoader(System.Reflection.Assembly.GetExecutingAssembly());
 
+            #region Basic Joints
+
+            Add(Common.Icon.Get("SinglePendulum"), "Basic Joints", "Revolute", Simulation, Create.Revolute);
+
+            #endregion
+
             #region Pendulums
 
             Add(Common.Icon.Get("SinglePendulum"), "Pendulums", "Single", Simulation, Create.Pendulum);

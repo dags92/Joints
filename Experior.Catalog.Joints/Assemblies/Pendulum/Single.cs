@@ -45,7 +45,7 @@ namespace Experior.Catalog.Joints.Assemblies.Pendulum
 
         [Browsable(true)]
         [Category("Parameters")]
-        [DisplayName("Length - Link 1")]
+        [DisplayName("Length 1")]
         [TypeConverter(typeof(FloatMeterToMillimeter))]
         [PropertyOrder(0)]
         public float Length1

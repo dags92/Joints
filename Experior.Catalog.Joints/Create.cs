@@ -1,3 +1,4 @@
+using Experior.Catalog.Joints.Assemblies.BasicJoints;
 using Experior.Catalog.Joints.Assemblies.Pendulum;
 using Experior.Core.Assemblies;
 
@@ -11,6 +12,22 @@ namespace Experior.Catalog.Joints
 
     public class Create
     {
+        #region Basic Joints
+
+        public static Assembly Revolute(string title, string subtitle, object properties)
+        {
+            var info = new RevoluteInfo()
+            {
+                name = Experior.Core.Assemblies.Assembly.GetValidName("Revolute Joint"),
+                height = 5f
+            };
+
+            var assembly = new Revolute(info);
+            return assembly;
+        }
+
+        #endregion
+
         #region Pendulums
 
         public static Assembly Pendulum(string title, string subtitle, object properties)
