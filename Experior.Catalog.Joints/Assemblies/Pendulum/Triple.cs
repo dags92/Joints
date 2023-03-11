@@ -7,6 +7,7 @@ using System.Numerics;
 using System.Windows.Media;
 using System.Xml.Serialization;
 using Experior.Core.Properties;
+using Experior.Core.Properties.TypeConverter;
 
 namespace Experior.Catalog.Joints.Assemblies.Pendulum
 {
@@ -35,6 +36,7 @@ namespace Experior.Catalog.Joints.Assemblies.Pendulum
         [Browsable(true)]
         [Category("Parameters")]
         [DisplayName("Length - Link 2")]
+        [TypeConverter(typeof(FloatMeterToMillimeter))]
         [PropertyOrder(2)]
         public float Length3
         {
@@ -59,6 +61,8 @@ namespace Experior.Catalog.Joints.Assemblies.Pendulum
         {
             base.CreateJoint();
 
+            RemoveLocalJoint();
+
             if (_link4 == null)
             {
                 _link4 = Experior.Core.Loads.Load.CreateBox(0.2f, 0.2f, 0.2f, Colors.BlueViolet);
@@ -66,23 +70,18 @@ namespace Experior.Catalog.Joints.Assemblies.Pendulum
                 ConfigureLoad(_link4);
             }
 
-            if (_joint3 != null)
-            {
-                RemoveJoint();
-            }
-
             Experior.Core.Environment.InvokePhysicsAction(() =>
             {
-                RigidDynamic link3Actor = ((Dynamic)Link2.Part).Actor;
+                RigidDynamic link3Actor = ((Dynamic)Link3.Part).Actor;
                 RigidDynamic link4Actor = ((Dynamic)_link4.Part).Actor;
 
-                if (link4Actor == null || link3Actor == null)
+                if (link3Actor == null || link4Actor == null)
                 {
                     return;
                 }
                 var link3Frame = Matrix4x4.Identity;
                 var link4Frame = Matrix4x4.Identity;
-                link3Frame.M42 = Length2;
+                link4Frame.M42 = Length3 - Length2;
 
                 _joint3 = Core.Environment.Scene.PhysXScene.CreateJoint(JointType.Spherical, link3Actor, link3Frame, link4Actor, link4Frame);
 
@@ -102,11 +101,16 @@ namespace Experior.Catalog.Joints.Assemblies.Pendulum
             _joint3.ConstraintFlags |= ConstraintFlag.Visualization;
         }
 
-        protected override void RemoveJoint()
-        {
-            base.RemoveJoint();
+        #endregion
 
-            Experior.Core.Environment.InvokePhysicsAction(_joint3.Dispose);
+        #region Private Methods
+
+        private void RemoveLocalJoint()
+        {
+            if (_joint3 != null)
+            {
+                Experior.Core.Environment.InvokePhysicsAction(_joint3.Dispose);
+            }
 
             if (_link4 != null)
             {

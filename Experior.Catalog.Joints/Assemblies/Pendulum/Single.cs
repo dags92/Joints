@@ -1,6 +1,5 @@
 ﻿using Experior.Core.Assemblies;
 using System;
-using System.Collections.Generic;
 using System.Windows.Media;
 using System.Xml.Serialization;
 using System.Numerics;
@@ -10,6 +9,7 @@ using System.ComponentModel;
 using Experior.Core.Mathematics;
 using Experior.Core.Loads;
 using Experior.Core.Properties;
+using Experior.Core.Properties.TypeConverter;
 
 namespace Experior.Catalog.Joints.Assemblies.Pendulum
 {
@@ -46,6 +46,7 @@ namespace Experior.Catalog.Joints.Assemblies.Pendulum
         [Browsable(true)]
         [Category("Parameters")]
         [DisplayName("Length - Link 1")]
+        [TypeConverter(typeof(FloatMeterToMillimeter))]
         [PropertyOrder(0)]
         public float Length1
         {
@@ -76,12 +77,6 @@ namespace Experior.Catalog.Joints.Assemblies.Pendulum
             Experior.Core.Environment.Invoke(CreateJoint);
         }
 
-        public override void Dispose()
-        {
-            RemoveJoint();
-            base.Dispose();
-        }
-
         #endregion
 
         #region Protected Properties
@@ -96,17 +91,11 @@ namespace Experior.Catalog.Joints.Assemblies.Pendulum
 
         protected virtual void CreateJoint()
         {
-            if (_joint1 != null)
-            {
-                RemoveJoint();
-            }
+            RemoveLocalJoint();
 
-            if (_link2 == null)
-            {
-                _link2 = Experior.Core.Loads.Load.CreateBox(0.2f, 0.2f, 0.2f, Colors.BlueViolet);
-                _link2.Position = Position + new Vector3(0, -Length1, 0);
-                ConfigureLoad(_link2);
-            }
+            _link2 = Experior.Core.Loads.Load.CreateBox(0.2f, 0.2f, 0.2f, Colors.BlueViolet);
+            _link2.Position = Position + new Vector3(0, -Length1, 0);
+            ConfigureLoad(_link2);
 
             Experior.Core.Environment.InvokePhysicsAction(() =>
             {
@@ -151,9 +140,16 @@ namespace Experior.Catalog.Joints.Assemblies.Pendulum
             load.Part.Sleep();
         }
 
-        protected virtual void RemoveJoint()
+        #endregion
+
+        #region Private Methods
+
+        private void RemoveLocalJoint()
         {
-            Experior.Core.Environment.InvokePhysicsAction(_joint1.Dispose);
+            if (_joint1 != null)
+            {
+                Experior.Core.Environment.InvokePhysicsAction(_joint1.Dispose);
+            }
 
             if (_link2 != null)
             {

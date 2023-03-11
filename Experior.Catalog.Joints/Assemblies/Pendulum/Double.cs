@@ -7,7 +7,7 @@ using System.Numerics;
 using System.Windows.Media;
 using System.Xml.Serialization;
 using Experior.Core.Properties;
-using static System.Windows.Forms.LinkLabel;
+using Experior.Core.Properties.TypeConverter;
 
 namespace Experior.Catalog.Joints.Assemblies.Pendulum
 {
@@ -36,6 +36,7 @@ namespace Experior.Catalog.Joints.Assemblies.Pendulum
         [Browsable(true)]
         [Category("Parameters")]
         [DisplayName("Length - Link 2")]
+        [TypeConverter(typeof(FloatMeterToMillimeter))]
         [PropertyOrder(1)]
         public float Length2
         {
@@ -66,16 +67,13 @@ namespace Experior.Catalog.Joints.Assemblies.Pendulum
         {
             base.CreateJoint();
 
+            RemoveLocalJoint();
+
             if (_link3 == null)
             {
                 _link3 = Experior.Core.Loads.Load.CreateBox(0.2f, 0.2f, 0.2f, Colors.BlueViolet);
                 _link3.Position = Position + new Vector3(0, -Length2, 0);
                 ConfigureLoad(_link3);
-            }
-
-            if (_joint2 != null)
-            {
-                RemoveJoint();
             }
 
             Experior.Core.Environment.InvokePhysicsAction(() =>
@@ -89,7 +87,7 @@ namespace Experior.Catalog.Joints.Assemblies.Pendulum
                 }
                 var link2Frame = Matrix4x4.Identity;
                 var link3Frame = Matrix4x4.Identity;
-                link3Frame.M42 = Length2;
+                link3Frame.M42 = Length2 - Length1;
 
                 _joint2 = Core.Environment.Scene.PhysXScene.CreateJoint(JointType.Spherical, link2Actor, link2Frame, link3Actor, link3Frame);
 
@@ -109,11 +107,16 @@ namespace Experior.Catalog.Joints.Assemblies.Pendulum
             _joint2.ConstraintFlags |= ConstraintFlag.Visualization;
         }
 
-        protected override void RemoveJoint()
-        {
-            base.RemoveJoint();
+        #endregion
 
-            Experior.Core.Environment.InvokePhysicsAction(_joint2.Dispose);
+        #region Private Methods
+
+        private void RemoveLocalJoint()
+        {
+            if (_joint2 != null)
+            {
+                Experior.Core.Environment.InvokePhysicsAction(_joint2.Dispose);
+            }
 
             if (_link3 != null)
             {
