@@ -15,6 +15,7 @@ namespace Experior.Catalog.Joints
             #region Basic Joints
 
             Add(Common.Icon.Get("SinglePendulum"), "Basic Joints", "Revolute", Simulation, Create.Revolute);
+            Add(Common.Icon.Get("SinglePendulum"), "Basic Joints", "Prismatic", Simulation, Create.Prismatic);
 
             #endregion
 

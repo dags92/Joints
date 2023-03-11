@@ -168,7 +168,7 @@ namespace Experior.Catalog.Joints.Assemblies.BasicJoints
 
                 var link1Frame = Matrix4x4.Identity;
                 var link2Frame = Matrix4x4.Identity;
-                link2Frame.M42 = Length1;
+                link2Frame.M41 = Length1;
 
                 _joint1 = Core.Environment.Scene.PhysXScene.CreateJoint(JointType.Revolute, link1Actor, link1Frame, link2Actor, link2Frame);
 
@@ -180,6 +180,7 @@ namespace Experior.Catalog.Joints.Assemblies.BasicJoints
         {
             if (_joint1 is PhysX.RevoluteJoint revolute)
             {
+                revolute.ConstraintFlags |= ConstraintFlag.Visualization;
                 revolute.Flags = RevoluteJointFlag.DriveEnabled;
 
                 if (revolute.Flags == RevoluteJointFlag.DriveEnabled)

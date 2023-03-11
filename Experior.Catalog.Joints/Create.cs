@@ -26,6 +26,18 @@ namespace Experior.Catalog.Joints
             return assembly;
         }
 
+        public static Assembly Prismatic(string title, string subtitle, object properties)
+        {
+            var info = new PrismaticInfo()
+            {
+                name = Experior.Core.Assemblies.Assembly.GetValidName("Prismatic Joint"),
+                height = 4f
+            };
+
+            var assembly = new Prismatic(info);
+            return assembly;
+        }
+
         #endregion
 
         #region Pendulums
