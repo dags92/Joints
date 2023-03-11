@@ -75,8 +75,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assemblies\Pendulum\DoublePendulum.cs" />
-    <Compile Include="Assemblies\Pendulum\Pendulum.cs" />
+    <Compile Include="Assemblies\Pendulum\Double.cs" />
+    <Compile Include="Assemblies\Pendulum\Single.cs" />
+    <Compile Include="Assemblies\Pendulum\Triple.cs" />
     <Compile Include="Create.cs" />
     <Compile Include="Joints.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

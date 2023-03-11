@@ -2,23 +2,20 @@
 using Experior.Core.Parts;
 using PhysX;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media;
-using Experior.Core.Loads;
+using System.Xml.Serialization;
+using Experior.Core.Properties;
 using static System.Windows.Forms.LinkLabel;
 
 namespace Experior.Catalog.Joints.Assemblies.Pendulum
 {
-    public class DoublePendulum : Pendulum
+    public class Double : Single
     {
         #region Fields
 
-        private readonly DoublePendulumInfo _info;
+        private readonly DoubleInfo _info;
 
         private Experior.Core.Loads.Load _link3;
         private PhysX.Joint _joint2;
@@ -27,7 +24,7 @@ namespace Experior.Catalog.Joints.Assemblies.Pendulum
 
         #region Constructor
 
-        public DoublePendulum(DoublePendulumInfo info) : base(info)
+        public Double(DoubleInfo info) : base(info)
         {
             _info = info;
         }
@@ -39,6 +36,7 @@ namespace Experior.Catalog.Joints.Assemblies.Pendulum
         [Browsable(true)]
         [Category("Parameters")]
         [DisplayName("Length - Link 2")]
+        [PropertyOrder(1)]
         public float Length2
         {
             get => _info.Length2;
@@ -53,6 +51,12 @@ namespace Experior.Catalog.Joints.Assemblies.Pendulum
                 Experior.Core.Environment.Invoke(CreateJoint);
             }
         }
+
+        #endregion
+
+        #region Protected Properties
+
+        protected Experior.Core.Loads.Load Link3 => _link3;
 
         #endregion
 
@@ -122,7 +126,8 @@ namespace Experior.Catalog.Joints.Assemblies.Pendulum
         #endregion
     }
 
-    public class DoublePendulumInfo : PendulumInfo
+    [Serializable, XmlInclude(typeof(DoubleInfo)), XmlType(TypeName = "Experior.Catalog.Joints.Assemblies.Pendulum.DoubleInfo")]
+    public class DoubleInfo : SingleInfo
     {
         public float Length2 { get; set; } = 1f;
     }

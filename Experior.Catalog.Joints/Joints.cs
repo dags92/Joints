@@ -15,7 +15,8 @@ namespace Experior.Catalog.Joints
             #region Pendulums
 
             Add(Common.Icon.Get("SinglePendulum"), "Pendulums", "Single", Simulation, Create.Pendulum);
-            Add(Common.Icon.Get("DoublePendulum"), "Pendulums", "Double", Simulation, Create.DoublePendulum);
+            Add(Common.Icon.Get("Double"), "Pendulums", "Double", Simulation, Create.DoublePendulum);
+            Add(Common.Icon.Get("Double"), "Pendulums", "Triple", Simulation, Create.TriplePendulum);
 
             #endregion
         }

@@ -9,14 +9,15 @@ using PhysX;
 using System.ComponentModel;
 using Experior.Core.Mathematics;
 using Experior.Core.Loads;
+using Experior.Core.Properties;
 
 namespace Experior.Catalog.Joints.Assemblies.Pendulum
 {
-    public class Pendulum : Assembly
+    public class Single : Assembly
     {
         #region Fields
 
-        private readonly PendulumInfo _info;
+        private readonly SingleInfo _info;
 
         private readonly Experior.Core.Parts.Box _link1;
         private Experior.Core.Loads.Load _link2;
@@ -26,7 +27,7 @@ namespace Experior.Catalog.Joints.Assemblies.Pendulum
 
         #region Constructor
 
-        public Pendulum(PendulumInfo info)
+        public Single(SingleInfo info)
             : base(info)
         {
             _info = info;
@@ -45,6 +46,7 @@ namespace Experior.Catalog.Joints.Assemblies.Pendulum
         [Browsable(true)]
         [Category("Parameters")]
         [DisplayName("Length - Link 1")]
+        [PropertyOrder(0)]
         public float Length1
         {
             get => _info.Length1;
@@ -60,9 +62,9 @@ namespace Experior.Catalog.Joints.Assemblies.Pendulum
             }
         }
 
-        public override string Category => "Pendulum";
+        public override string Category => "Single";
 
-        public override ImageSource Image => Common.Icon.Get("Pendulum");
+        public override ImageSource Image => Common.Icon.Get("Single");
 
         #endregion
 
@@ -164,8 +166,8 @@ namespace Experior.Catalog.Joints.Assemblies.Pendulum
         #endregion
     }
 
-    [Serializable, XmlInclude(typeof(PendulumInfo)), XmlType(TypeName = "Experior.Catalog.Joints.Assemblies.Pendulum.PendulumInfo")]
-    public class PendulumInfo : Experior.Core.Assemblies.AssemblyInfo
+    [Serializable, XmlInclude(typeof(SingleInfo)), XmlType(TypeName = "Experior.Catalog.Joints.Assemblies.Pendulum.SingleInfo")]
+    public class SingleInfo : Experior.Core.Assemblies.AssemblyInfo
     {
         public float Length1 { get; set; } = 0.5f;
     }

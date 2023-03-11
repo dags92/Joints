@@ -15,25 +15,37 @@ namespace Experior.Catalog.Joints
 
         public static Assembly Pendulum(string title, string subtitle, object properties)
         {
-            var info = new PendulumInfo()
+            var info = new SingleInfo()
             {
-                name = Experior.Core.Assemblies.Assembly.GetValidName("Pendulum"),
+                name = Experior.Core.Assemblies.Assembly.GetValidName("Single"),
                 height = 5f
             };
 
-            var assembly = new Pendulum(info);
+            var assembly = new Single(info);
             return assembly;
         }
 
         public static Assembly DoublePendulum(string title, string subtitle, object properties)
         {
-            var info = new DoublePendulumInfo()
+            var info = new DoubleInfo()
             {
-                name = Experior.Core.Assemblies.Assembly.GetValidName("Double Pendulum"),
+                name = Experior.Core.Assemblies.Assembly.GetValidName("Double Single"),
                 height = 5f
             };
 
-            var assembly = new DoublePendulum(info);
+            var assembly = new Double(info);
+            return assembly;
+        }
+
+        public static Assembly TriplePendulum(string title, string subtitle, object properties)
+        {
+            var info = new TripleInfo()
+            {
+                name = Experior.Core.Assemblies.Assembly.GetValidName("Triple Single"),
+                height = 7f
+            };
+
+            var assembly = new Triple(info);
             return assembly;
         }
 
