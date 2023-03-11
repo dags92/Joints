@@ -6,7 +6,6 @@ using System.Numerics;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Xml.Serialization;
-using static System.Windows.Forms.LinkLabel;
 
 namespace Experior.Catalog.Joints.Assemblies.Mechanisms
 {
@@ -23,6 +22,11 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
         private Experior.Core.Loads.Load _link3;
         private PhysX.Joint _joint2;
 
+        private Experior.Core.Loads.Load _link4;
+        private PhysX.Joint _joint3;
+
+        private Experior.Core.Parts.Box _chamber;
+        private PhysX.Joint _joint4;
 
         #endregion
 
@@ -37,6 +41,12 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
                 Rigid = true
             };
             Add(_shaft);
+
+            _chamber = new Experior.Core.Parts.Box(Colors.Orange, 0.05f, 0.05f, 0.05f)
+            {
+                Rigid = true
+            };
+            Add(_chamber, new Vector3(_shaft.Length / 2 + 0.05f + _chamber.Length / 2, 0, -_shaft.Width / 2 -_chamber.Width / 2 - 2.35f));
         }
 
         #endregion
@@ -68,15 +78,18 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
         private void Create()
         {
             _link2 = Experior.Core.Loads.Load.CreateBox(0.05f, 0.05f, 0.8f, Colors.Gray);
-            _link2.Position = Position + new Vector3(_shaft.Length / 2 + _link2.Length / 2, 0, -_link2.Width / 2);
             ConfigureLoad(_link2);
 
             _link3 = Experior.Core.Loads.Load.CreateBox(0.05f, 0.05f, 1.6f, Colors.LightSlateGray);
-            _link3.Position = _link2.Position + new Vector3(_link2.Length / 2 + _link3.Length / 2, 0, -_link2.Width / 2 - _link3.Width / 2 + 0.05f);
             ConfigureLoad(_link3);
+
+            _link4 = Experior.Core.Loads.Load.CreateBox(0.1f, 0.1f, 0.1f, Colors.Silver);
+            ConfigureLoad(_link4);
 
             Experior.Core.Environment.InvokePhysicsAction(() =>
             {
+                // Part 1:
+
                 RigidDynamic link1Actor = _shaft.Actor;
                 RigidDynamic link2Actor = ((Dynamic)_link2.Part).Actor;
 
@@ -92,6 +105,7 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
 
                 _joint1 = Core.Environment.Scene.PhysXScene.CreateJoint(JointType.Revolute, link1Actor, link1Frame, link2Actor, link2Frame);
 
+                // Part 2:
                 RigidDynamic link3Actor = ((Dynamic)_link3.Part).Actor;
 
                 if (link3Actor == null)
@@ -107,6 +121,35 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
                 link3Frame.M43 = -_link3.Width / 2 + 0.05f;
 
                 _joint2 = Core.Environment.Scene.PhysXScene.CreateJoint(JointType.Revolute, link2Actor, interLink2Frame, link3Actor, link3Frame);
+
+                // Part 3:
+                RigidDynamic link4Actor = ((Dynamic)_link4.Part).Actor;
+
+                if (link4Actor == null)
+                {
+                    return;
+                }
+
+                var interLink3Frame = Matrix4x4.Identity;
+                interLink3Frame.M43 = _link3.Width / 2;
+
+                var link4Frame = Matrix4x4.Identity;
+                link4Frame.M41 = -_link4.Length / 2;
+
+                _joint3 = Core.Environment.Scene.PhysXScene.CreateJoint(JointType.Spherical, link3Actor, interLink3Frame, link4Actor, link4Frame);
+
+                // Part 4:
+                RigidDynamic link5Actor = _chamber.Actor;
+
+                if (link5Actor == null)
+                {
+                    return;
+                }
+
+                var interLink4Frame = Matrix4x4.CreateRotationY((float)Math.PI / 2);
+
+                _joint4 = Core.Environment.Scene.PhysXScene.CreateJoint(JointType.Prismatic, link5Actor,
+                    interLink4Frame, link4Actor, Matrix4x4.Identity);
 
                 ConfigureJoints();
             });
@@ -139,6 +182,16 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
                 {
                     revolution.Flags = RevoluteJointFlag.DriveFreeSpin;
                 }
+            }
+
+            if (_joint3 != null)
+            {
+                _joint3.ConstraintFlags |= ConstraintFlag.Visualization;
+            }
+
+            if (_joint4 != null)
+            {
+                _joint4.ConstraintFlags |= ConstraintFlag.Visualization;
             }
         }
 
