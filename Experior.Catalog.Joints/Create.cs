@@ -1,20 +1,42 @@
+using Experior.Catalog.Joints.Assemblies.Pendulum;
 using Experior.Core.Assemblies;
 
 namespace Experior.Catalog.Joints
 {
     internal class Common
     {
-        public static Experior.Core.Resources.EmbeddedImageLoader EmbeddedImageLoader;
-        public static Experior.Core.Resources.EmbeddedResourceLoader EmbeddedResourceLoader;
+        public static Experior.Core.Resources.EmbeddedImageLoader Icon;
+        public static Experior.Core.Resources.EmbeddedResourceLoader Mesh;
     }
 
     public class Create
     {
-        public static Assembly MyAssembly(string title, string subtitle, object properties)
+        #region Pendulums
+
+        public static Assembly Pendulum(string title, string subtitle, object properties)
         {
-            var info = new Experior.Catalog.Joints.Assemblies.MyAssemblyInfo { name = Experior.Core.Assemblies.Assembly.GetValidName("MyAssembly") };
-            var assembly = new Experior.Catalog.Joints.Assemblies.MyAssembly(info);
+            var info = new PendulumInfo()
+            {
+                name = Experior.Core.Assemblies.Assembly.GetValidName("Pendulum"),
+                height = 5f
+            };
+
+            var assembly = new Pendulum(info);
             return assembly;
         }
+
+        public static Assembly DoublePendulum(string title, string subtitle, object properties)
+        {
+            var info = new DoublePendulumInfo()
+            {
+                name = Experior.Core.Assemblies.Assembly.GetValidName("Double Pendulum"),
+                height = 5f
+            };
+
+            var assembly = new DoublePendulum(info);
+            return assembly;
+        }
+
+        #endregion
     }
 }
