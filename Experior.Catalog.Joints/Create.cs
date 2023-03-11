@@ -1,4 +1,5 @@
 using Experior.Catalog.Joints.Assemblies.BasicJoints;
+using Experior.Catalog.Joints.Assemblies.Mechanisms;
 using Experior.Catalog.Joints.Assemblies.Pendulum;
 using Experior.Core.Assemblies;
 
@@ -75,6 +76,22 @@ namespace Experior.Catalog.Joints
             };
 
             var assembly = new Triple(info);
+            return assembly;
+        }
+
+        #endregion
+
+        #region Mechanisms
+
+        public static Assembly SliderCrank(string title, string subtitle, object properties)
+        {
+            var info = new SliderCrankInfo()
+            {
+                name = Experior.Core.Assemblies.Assembly.GetValidName("Slider Crank"),
+                height = 5f
+            };
+
+            var assembly = new SliderCrank(info);
             return assembly;
         }
 

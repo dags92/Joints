@@ -85,7 +85,6 @@ namespace Experior.Catalog.Joints.Assemblies.BasicJoints
 
                 var link1Frame = Matrix4x4.Identity;
                 var link2Frame = Matrix4x4.Identity;
-                link2Frame.M41 = 0.5f;
 
                 _joint1 = Core.Environment.Scene.PhysXScene.CreateJoint(JointType.Prismatic, link1Actor, link1Frame, link2Actor, link2Frame);
 

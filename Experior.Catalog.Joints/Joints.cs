@@ -26,6 +26,12 @@ namespace Experior.Catalog.Joints
             Add(Common.Icon.Get("Double"), "Pendulums", "Triple", Simulation, Create.TriplePendulum);
 
             #endregion
+
+            #region Mechanisms
+
+            Add(Common.Icon.Get("Double"), "Mechanisms", "Slider Crank", Simulation, Create.SliderCrank);
+
+            #endregion
         }
 
         public override ImageSource Logo => Common.Icon.Get("Logo");
