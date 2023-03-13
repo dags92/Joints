@@ -75,6 +75,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assemblies\AuxiliaryData.cs" />
+    <Compile Include="Assemblies\BasicJoints\Base.cs" />
+    <Compile Include="Assemblies\BasicJoints\Fixed.cs" />
     <Compile Include="Assemblies\BasicJoints\Prismatic.cs" />
     <Compile Include="Assemblies\BasicJoints\Revolute.cs" />
     <Compile Include="Assemblies\Mechanisms\SliderCrank.cs" />

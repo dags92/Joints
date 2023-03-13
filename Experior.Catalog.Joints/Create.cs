@@ -1,3 +1,4 @@
+using Experior.Catalog.Joints.Assemblies;
 using Experior.Catalog.Joints.Assemblies.BasicJoints;
 using Experior.Catalog.Joints.Assemblies.Mechanisms;
 using Experior.Catalog.Joints.Assemblies.Pendulum;
@@ -20,7 +21,10 @@ namespace Experior.Catalog.Joints
             var info = new RevoluteInfo()
             {
                 name = Experior.Core.Assemblies.Assembly.GetValidName("Revolute Joint"),
-                height = 5f
+                length = 0.2f,
+                width = 0.2f,
+                height = 0.2f,
+                JointType = AuxiliaryData.JointTypes.Revolute
             };
 
             var assembly = new Revolute(info);
@@ -36,6 +40,21 @@ namespace Experior.Catalog.Joints
             };
 
             var assembly = new Prismatic(info);
+            return assembly;
+        }
+
+        public static Assembly Fixed(string title, string subtitle, object properties)
+        {
+            var info = new FixedInfo()
+            {
+                name = Experior.Core.Assemblies.Assembly.GetValidName("Fixed Joint"),
+                length = 0.2f,
+                width = 0.2f,
+                height = 0.2f,
+                JointType = AuxiliaryData.JointTypes.Fixed
+            };
+
+            var assembly = new Fixed(info);
             return assembly;
         }
 
