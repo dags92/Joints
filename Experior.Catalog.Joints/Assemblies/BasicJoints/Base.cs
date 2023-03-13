@@ -201,6 +201,8 @@ namespace Experior.Catalog.Joints.Assemblies.BasicJoints
             }
         }
 
+        public override string Category => "Basic Joints";
+
         #endregion
 
         #region Protected Properties
@@ -247,6 +249,9 @@ namespace Experior.Catalog.Joints.Assemblies.BasicJoints
                 case AuxiliaryData.JointTypes.Prismatic:
                     return PhysX.JointType.Prismatic;
 
+                case AuxiliaryData.JointTypes.Spherical:
+                    return PhysX.JointType.Spherical;
+
                 default:
                     return PhysX.JointType.Fixed;
             }
@@ -273,7 +278,11 @@ namespace Experior.Catalog.Joints.Assemblies.BasicJoints
                 Remove();
                 CreateLinks();
                 UpdateDynamicLinkProperties();
-                Experior.Core.Environment.InvokePhysicsAction(CreateJoint);
+                Experior.Core.Environment.InvokePhysicsAction(() =>
+                {
+                    CreateJoint();
+                    UpdateJointProperties();
+                });
             });
         }
 

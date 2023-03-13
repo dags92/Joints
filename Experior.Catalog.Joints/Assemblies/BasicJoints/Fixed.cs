@@ -24,8 +24,6 @@ namespace Experior.Catalog.Joints.Assemblies.BasicJoints
 
         #region Public Properties
 
-        public override string Category => "Basic Joints";
-
         public override ImageSource Image => Common.Icon.Get("FixedJoint");
 
         #endregion

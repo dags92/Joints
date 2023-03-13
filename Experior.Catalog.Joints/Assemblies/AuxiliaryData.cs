@@ -12,7 +12,8 @@ namespace Experior.Catalog.Joints.Assemblies
         {
             Fixed,
             Revolute,
-            Prismatic
+            Prismatic,
+            Spherical
         }
     }
 }

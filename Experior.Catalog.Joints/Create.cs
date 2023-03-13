@@ -1,3 +1,4 @@
+using System.Numerics;
 using Experior.Catalog.Joints.Assemblies;
 using Experior.Catalog.Joints.Assemblies.BasicJoints;
 using Experior.Catalog.Joints.Assemblies.Mechanisms;
@@ -36,7 +37,11 @@ namespace Experior.Catalog.Joints
             var info = new PrismaticInfo()
             {
                 name = Experior.Core.Assemblies.Assembly.GetValidName("Prismatic Joint"),
-                height = 4f
+                length = 0.2f,
+                width = 0.2f,
+                height = 0.2f,
+                JointType = AuxiliaryData.JointTypes.Prismatic,
+                DynamicLinkTranslation = new Vector3(0.5f, 0f, 0f)
             };
 
             var assembly = new Prismatic(info);
@@ -55,6 +60,21 @@ namespace Experior.Catalog.Joints
             };
 
             var assembly = new Fixed(info);
+            return assembly;
+        }
+
+        public static Assembly Spherical(string title, string subtitle, object properties)
+        {
+            var info = new SphericalInfo()
+            {
+                name = Experior.Core.Assemblies.Assembly.GetValidName("Spherical Joint"),
+                length = 0.2f,
+                width = 0.2f,
+                height = 0.2f,
+                JointType = AuxiliaryData.JointTypes.Spherical
+            };
+
+            var assembly = new Spherical(info);
             return assembly;
         }
 

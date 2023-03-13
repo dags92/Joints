@@ -1,13 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Numerics;
 using System.Windows.Media;
 using System.Xml.Serialization;
 using Experior.Core.Mathematics;
-using Experior.Core.Parts;
 using Experior.Core.Properties;
 using PhysX;
-using Experior.Core.Loads;
 
 namespace Experior.Catalog.Joints.Assemblies.BasicJoints
 {
@@ -30,10 +27,45 @@ namespace Experior.Catalog.Joints.Assemblies.BasicJoints
 
         #region Public Properties
 
-        [Browsable(true)]
-        [Category("Joint")]
-        [DisplayName("Drive Velocity")]
+        [Category("Motion")]
+        [DisplayName("Enable Drive")]
         [PropertyOrder(0)]
+        public bool EnableDrive
+        {
+            get => _info.EnableDrive;
+            set
+            {
+                if (value == _info.EnableDrive)
+                {
+                    return;
+                }
+
+                _info.EnableDrive = value;
+                Experior.Core.Environment.InvokePhysicsAction(UpdateJointProperties);
+            }
+        }
+
+        [Category("Motion")]
+        [DisplayName("Enable Free Spin")]
+        [PropertyOrder(1)]
+        public bool EnableFreeSpin
+        {
+            get => _info.EnableFreeSpin;
+            set
+            {
+                if (value == _info.EnableFreeSpin)
+                {
+                    return;
+                }
+
+                _info.EnableFreeSpin = value;
+                Experior.Core.Environment.InvokePhysicsAction(UpdateJointProperties);
+            }
+        }
+
+        [Category("Motion")]
+        [DisplayName("Drive Velocity")]
+        [PropertyOrder(2)]
         public float DriveVelocity
         {
             get => _info.DriveVelocity;
@@ -49,10 +81,9 @@ namespace Experior.Catalog.Joints.Assemblies.BasicJoints
             }
         }
 
-        [Browsable(true)]
         [Category("Joint")]
-        [DisplayName("Drive Gear Ratio")]
-        [PropertyOrder(1)]
+        [DisplayName("Motion Gear Ratio")]
+        [PropertyOrder(3)]
         public float DriveGearRatio
         {
             get => _info.DriveGearRatio;
@@ -67,8 +98,6 @@ namespace Experior.Catalog.Joints.Assemblies.BasicJoints
                 Experior.Core.Environment.InvokePhysicsAction(UpdateJointProperties);
             }
         }
-
-        public override string Category => "Basic Joints";
 
         public override ImageSource Image => Common.Icon.Get("RevoluteJoint");
 
@@ -99,7 +128,10 @@ namespace Experior.Catalog.Joints.Assemblies.BasicJoints
 
             if (Joint is PhysX.RevoluteJoint revolute)
             {
-                revolute.Flags = RevoluteJointFlag.DriveEnabled;
+                var flags = EnableDrive ? RevoluteJointFlag.DriveEnabled : 0;
+                flags |= EnableFreeSpin ? RevoluteJointFlag.DriveFreeSpin : RevoluteJointFlag.LimitEnabled;
+
+                revolute.Flags = flags;
                 revolute.DriveVelocity = DriveVelocity;
                 revolute.DriveGearRatio = DriveGearRatio;
             }
@@ -114,5 +146,9 @@ namespace Experior.Catalog.Joints.Assemblies.BasicJoints
         public float DriveVelocity { get; set; } = 0.4f;
 
         public float DriveGearRatio { get; set; } = 1f;
+
+        public bool EnableDrive { get; set; }
+
+        public bool EnableFreeSpin { get; set; }
     }
 }

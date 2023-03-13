@@ -105,6 +105,20 @@ namespace Experior.Catalog.Joints.Assemblies.Pendulum
             base.ConfigureJoint();
 
             _joint2.ConstraintFlags |= ConstraintFlag.Visualization;
+
+            if (_joint2 is PhysX.SphericalJoint spherical)
+            {
+                spherical.Flags = SphericalJointFlag.LimitEnabled;
+                var temp = spherical.GetLimitCone();
+                if (temp != null)
+                {
+                    temp.YLimitAngle = (float)Math.PI / 6;
+                    temp.ZLimitAngle = (float)Math.PI / 6;
+                    temp.Damping = float.MaxValue;
+                    temp.BounceThreshold = 0.001f;
+                    temp.Stiffness = 20f;
+                }
+            }
         }
 
         #endregion

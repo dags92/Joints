@@ -80,6 +80,7 @@
     <Compile Include="Assemblies\BasicJoints\Fixed.cs" />
     <Compile Include="Assemblies\BasicJoints\Prismatic.cs" />
     <Compile Include="Assemblies\BasicJoints\Revolute.cs" />
+    <Compile Include="Assemblies\BasicJoints\Spherical.cs" />
     <Compile Include="Assemblies\Mechanisms\SliderCrank.cs" />
     <Compile Include="Assemblies\Pendulum\Double.cs" />
     <Compile Include="Assemblies\Pendulum\Single.cs" />
