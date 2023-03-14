@@ -41,7 +41,7 @@ namespace Experior.Catalog.Joints
                 width = 0.2f,
                 height = 0.2f,
                 JointType = AuxiliaryData.JointTypes.Prismatic,
-                DynamicLinkTranslation = new Vector3(0.5f, 0f, 0f)
+                DynamicLinkTranslation = Vector3.Zero
             };
 
             var assembly = new Prismatic(info);
@@ -56,7 +56,8 @@ namespace Experior.Catalog.Joints
                 length = 0.2f,
                 width = 0.2f,
                 height = 0.2f,
-                JointType = AuxiliaryData.JointTypes.Fixed
+                JointType = AuxiliaryData.JointTypes.Fixed,
+                DynamicLinkTranslation = new Vector3(0.5f, 0f, 0f)
             };
 
             var assembly = new Fixed(info);

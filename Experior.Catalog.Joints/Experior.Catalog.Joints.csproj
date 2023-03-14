@@ -64,6 +64,7 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -75,6 +76,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actuators\AuxiliaryData.cs" />
+    <Compile Include="Actuators\Motor\Base.cs" />
+    <Compile Include="Actuators\Motor\Motion.cs" />
     <Compile Include="Assemblies\AuxiliaryData.cs" />
     <Compile Include="Assemblies\BasicJoints\Base.cs" />
     <Compile Include="Assemblies\BasicJoints\Distance.cs" />
@@ -94,6 +98,7 @@
     <EmbeddedResource Include="Icon\MyAssembly.png" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Actuators\Pneumatic\" />
     <Folder Include="Mesh\" />
     <Folder Include="Texture\" />
   </ItemGroup>
