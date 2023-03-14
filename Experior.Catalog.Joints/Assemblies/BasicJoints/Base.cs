@@ -2,6 +2,7 @@
 using System;
 using System.ComponentModel;
 using System.Numerics;
+using System.Windows.Input;
 using System.Xml.Serialization;
 using Experior.Core.Mathematics;
 using Experior.Core.Properties;
@@ -17,6 +18,7 @@ namespace Experior.Catalog.Joints.Assemblies.BasicJoints
         #region Fields
 
         private readonly BaseInfo _info;
+        private readonly Plotter.Plotter _plotter;
 
         #endregion
 
@@ -26,6 +28,7 @@ namespace Experior.Catalog.Joints.Assemblies.BasicJoints
             : base(info)
         {
             _info = info;
+            _plotter = new Plotter.Plotter();
         }
 
         #endregion
@@ -231,6 +234,14 @@ namespace Experior.Catalog.Joints.Assemblies.BasicJoints
             Experior.Core.Environment.Invoke(Remove);
 
             base.Dispose();
+        }
+
+        public override void KeyDown(KeyEventArgs e)
+        {
+            if (e.Key == Key.W)
+            {
+                _plotter.Show();
+            }
         }
 
         #endregion

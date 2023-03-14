@@ -72,6 +72,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
@@ -92,10 +93,22 @@
     <Compile Include="Assemblies\Pendulum\Triple.cs" />
     <Compile Include="Create.cs" />
     <Compile Include="Joints.cs" />
+    <Compile Include="Plotter\Configurator.cs" />
+    <Compile Include="Plotter\IChart.cs" />
+    <Compile Include="Plotter\Plotter.cs" />
+    <Compile Include="Plotter\UI\PlotterWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Plotter\UI\PlotterWindow.Designer.cs">
+      <DependentUpon>PlotterWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Icon\MyAssembly.png" />
+    <EmbeddedResource Include="Plotter\UI\PlotterWindow.resx">
+      <DependentUpon>PlotterWindow.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Actuators\Pneumatic\" />
