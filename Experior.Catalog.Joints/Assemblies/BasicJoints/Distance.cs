@@ -1,22 +1,22 @@
 ﻿using System;
-using System.Numerics;
 using System.Windows.Media;
 using System.Xml.Serialization;
 using PhysX;
 
 namespace Experior.Catalog.Joints.Assemblies.BasicJoints
 {
-    public class Prismatic : Base
+    public class Distance : Base
     {
         #region Fields
 
-        private readonly PrismaticInfo _info;
+        private readonly DistanceInfo _info;
 
         #endregion
 
         #region Constructor
 
-        public Prismatic(PrismaticInfo info) : base(info)
+        public Distance(DistanceInfo info)
+            : base(info)
         {
             _info = info;
         }
@@ -25,7 +25,9 @@ namespace Experior.Catalog.Joints.Assemblies.BasicJoints
 
         #region Public Properties
 
-        public override ImageSource Image => Common.Icon.Get("PrismaticJoint");
+        public override string Category => "Basic Joints";
+
+        public override ImageSource Image => Common.Icon.Get("Distance");
 
         #endregion
 
@@ -45,7 +47,6 @@ namespace Experior.Catalog.Joints.Assemblies.BasicJoints
             if (DynamicLink == null)
             {
                 DynamicLink = Experior.Core.Loads.Load.CreateBox(Length, Height, Width, Colors.DarkSlateGray);
-                DynamicLink.Position = Position + DynamicLinkTranslation;
             }
         }
 
@@ -53,19 +54,18 @@ namespace Experior.Catalog.Joints.Assemblies.BasicJoints
         {
             base.UpdateJointProperties();
 
-            if (Joint is PhysX.PrismaticJoint prismatic)
+            if (Joint is PhysX.DistanceJoint distance)
             {
-                prismatic.Flag = PrismaticJointFlag.LimitEnabled;
-                prismatic.Limit = new JointLinearLimitPair(-2f, 2f, new Spring(1f, 1f));
+                distance.Flags = DistanceJointFlag.MaximumDistanceEnabled;
+                distance.MaximumDistance = 0.2f;
             }
         }
 
         #endregion
     }
 
-    [Serializable, XmlInclude(typeof(PrismaticInfo)), XmlType(TypeName = "Experior.Catalog.Joints.Assemblies.BasicJoints.PrismaticInfo")]
-    public class PrismaticInfo : BaseInfo
+    [Serializable, XmlInclude(typeof(DistanceInfo)), XmlType(TypeName = "Experior.Catalog.Joints.Assemblies.BasicJoints.DistanceInfo")]
+    public class DistanceInfo : BaseInfo
     {
-
     }
 }

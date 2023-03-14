@@ -13,7 +13,8 @@ namespace Experior.Catalog.Joints.Assemblies
             Fixed,
             Revolute,
             Prismatic,
-            Spherical
+            Spherical,
+            Distance
         }
     }
 }

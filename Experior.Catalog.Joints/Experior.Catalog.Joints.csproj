@@ -77,6 +77,7 @@
   <ItemGroup>
     <Compile Include="Assemblies\AuxiliaryData.cs" />
     <Compile Include="Assemblies\BasicJoints\Base.cs" />
+    <Compile Include="Assemblies\BasicJoints\Distance.cs" />
     <Compile Include="Assemblies\BasicJoints\Fixed.cs" />
     <Compile Include="Assemblies\BasicJoints\Prismatic.cs" />
     <Compile Include="Assemblies\BasicJoints\Revolute.cs" />

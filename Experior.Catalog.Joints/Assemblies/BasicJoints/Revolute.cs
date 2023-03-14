@@ -129,7 +129,10 @@ namespace Experior.Catalog.Joints.Assemblies.BasicJoints
             if (Joint is PhysX.RevoluteJoint revolute)
             {
                 var flags = EnableDrive ? RevoluteJointFlag.DriveEnabled : 0;
-                flags |= EnableFreeSpin ? RevoluteJointFlag.DriveFreeSpin : RevoluteJointFlag.LimitEnabled;
+                if (EnableFreeSpin)
+                {
+                    flags |= RevoluteJointFlag.DriveFreeSpin;
+                } 
 
                 revolute.Flags = flags;
                 revolute.DriveVelocity = DriveVelocity;
@@ -147,7 +150,7 @@ namespace Experior.Catalog.Joints.Assemblies.BasicJoints
 
         public float DriveGearRatio { get; set; } = 1f;
 
-        public bool EnableDrive { get; set; }
+        public bool EnableDrive { get; set; } = true;
 
         public bool EnableFreeSpin { get; set; }
     }

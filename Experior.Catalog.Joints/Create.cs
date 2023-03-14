@@ -78,6 +78,21 @@ namespace Experior.Catalog.Joints
             return assembly;
         }
 
+        public static Assembly Distance(string title, string subtitle, object properties)
+        {
+            var info = new SphericalInfo()
+            {
+                name = Experior.Core.Assemblies.Assembly.GetValidName("Distance Joint"),
+                length = 0.2f,
+                width = 0.2f,
+                height = 0.2f,
+                JointType = AuxiliaryData.JointTypes.Distance
+            };
+
+            var assembly = new Spherical(info);
+            return assembly;
+        }
+
         #endregion
 
         #region Pendulums
