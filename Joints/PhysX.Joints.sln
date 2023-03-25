@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33502.453
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Experior.Catalog.PhysX.Joints", "Experior.Catalog.PhysX.Joints\Experior.Catalog.PhysX.Joints.csproj", "{FA09C51C-4D10-4E6D-A2A6-B54C75A206DE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FA09C51C-4D10-4E6D-A2A6-B54C75A206DE}.Debug|x64.ActiveCfg = Debug|x64
+		{FA09C51C-4D10-4E6D-A2A6-B54C75A206DE}.Debug|x64.Build.0 = Debug|x64
+		{FA09C51C-4D10-4E6D-A2A6-B54C75A206DE}.Release|x64.ActiveCfg = Release|x64
+		{FA09C51C-4D10-4E6D-A2A6-B54C75A206DE}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E8C6AD8B-A3F5-4BD1-B877-A44BA7BC898C}
+	EndGlobalSection
+EndGlobal

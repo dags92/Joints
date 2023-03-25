@@ -1,0 +1,58 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<Platforms>x64</Platforms>
+		<AssemblyName>Experior.Catalog.PhysX.Joints</AssemblyName>
+		<RootNamespace>Experior.Catalog.PhysX.Joints</RootNamespace>
+		<SatelliteResourceLanguages>en-US</SatelliteResourceLanguages>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<TargetFrameworks>net472</TargetFrameworks>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<PackageId>Experior.Catalog.</PackageId>
+		<Title>Experior Catalog Template</Title>
+		<Description>Experior 7.0 Catalog Template</Description>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<OutputPath>$(EXPERIOR7_BIN)</OutputPath>
+	</PropertyGroup>
+
+	<ItemGroup>
+      <None Remove="Icon\TemplateAssembly.png" />
+      <None Remove="Icon\TemplateAssembly.svg" />
+    </ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="Icon\TemplateAssembly.svg" />
+	</ItemGroup>
+
+    <ItemGroup>
+        <Reference Include="Experior.Core">
+          <HintPath>$(OutputPath)\Experior.Core.dll</HintPath>
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Experior.Interfaces">
+          <HintPath>$(OutputPath)\Experior.Interfaces.dll</HintPath>
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Experior.Rendering.Interfaces">
+          <HintPath>$(OutputPath)\Experior.Rendering.Interfaces.dll</HintPath>
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="PresentationCore" />
+        <Reference Include="WindowsBase" />
+    </ItemGroup>
+
+    <UsingTask TaskName="Experior.Build" Architecture="x64" AssemblyFile="$(EXPERIOR7_BIN)\Experior.Build.dll" />
+
+    <Target Name="PluginSigning" AfterTargets="AfterBuild">
+        <Message Importance="High" Text="Signing plugin $(TargetFileName)..." />
+        <Experior.Build AssemblyFileLocation="$(OutputPath)$(TargetFileName)"></Experior.Build>
+    </Target>
+	
+</Project>

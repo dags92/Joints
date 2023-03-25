@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "Execute Experior": {
+      "commandName": "Executable",
+      "executablePath": "$(OutputPath)\\experior.exe",
+      "commandLineArgs": "config"
+    }
+  }
+}
