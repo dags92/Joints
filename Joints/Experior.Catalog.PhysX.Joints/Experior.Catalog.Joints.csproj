@@ -2,8 +2,8 @@
 
 	<PropertyGroup>
 		<Platforms>x64</Platforms>
-		<AssemblyName>Experior.Catalog.PhysX.Joints</AssemblyName>
-		<RootNamespace>Experior.Catalog.PhysX.Joints</RootNamespace>
+		<AssemblyName>Experior.Catalog.Joints</AssemblyName>
+		<RootNamespace>Experior.Catalog.Joints</RootNamespace>
 		<SatelliteResourceLanguages>en-US</SatelliteResourceLanguages>
 	</PropertyGroup>
 
@@ -15,6 +15,7 @@
 		<PackageId>Experior.Catalog.</PackageId>
 		<Title>Experior Catalog Template</Title>
 		<Description>Experior 7.0 Catalog Template</Description>
+		<BaseOutputPath>C:\Xcelgo\Xcelgo Experior 7</BaseOutputPath>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -44,8 +45,28 @@
           <HintPath>$(OutputPath)\Experior.Rendering.Interfaces.dll</HintPath>
           <Private>False</Private>
         </Reference>
+        <Reference Include="PhysX.Net">
+          <HintPath>..\..\..\..\..\Xcelgo\Xcelgo Experior 7\PhysX.Net.dll</HintPath>
+          <Private>False</Private>
+        </Reference>
         <Reference Include="PresentationCore" />
+        <Reference Include="System.ComponentModel.DataAnnotations" />
         <Reference Include="WindowsBase" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Properties\Settings.Designer.cs">
+        <DesignTimeSharedInput>True</DesignTimeSharedInput>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Settings.settings</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="Properties\Settings.settings">
+        <Generator>SettingsSingleFileGenerator</Generator>
+        <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+      </None>
     </ItemGroup>
 
     <UsingTask TaskName="Experior.Build" Architecture="x64" AssemblyFile="$(EXPERIOR7_BIN)\Experior.Build.dll" />

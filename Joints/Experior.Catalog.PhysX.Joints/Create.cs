@@ -1,16 +1,30 @@
+using Experior.Catalog.Joints.Assemblies.Mechanisms;
 using Experior.Core.Assemblies;
 
-namespace Experior.Catalog.PhysX.Joints
+namespace Experior.Catalog.Joints
 {
+    internal class Common
+    {
+        public static Experior.Core.Resources.EmbeddedImageLoader Icon;
+        public static Experior.Core.Resources.EmbeddedResourceLoader Mesh;
+    }
+
     public class Create
     {
-        public static Assembly TemplateAssembly(string group, string title, object properties)
+        #region Mechanisms
+
+        public static Assembly SliderCrank(string title, string subtitle, object properties)
         {
-            var info = new Assemblies.TemplateAssemblyInfo
+            var info = new SliderCrankInfo()
             {
-                name = Assembly.GetValidName("Template Assembly")
+                name = Experior.Core.Assemblies.Assembly.GetValidName("Slider Crank"),
+                height = 3f
             };
-            return new Assemblies.TemplateAssembly(info);
+
+            var assembly = new SliderCrank(info);
+            return assembly;
         }
+
+        #endregion
     }
 }

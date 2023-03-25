@@ -1,0 +1,37 @@
+using System.Windows.Media;
+
+namespace Experior.Catalog.Joints
+{
+    public class Joints : Experior.Core.Catalog
+    {
+        #region Fields
+
+
+
+        #endregion
+
+        #region Constructor
+
+        public Joints(): base("Joints")
+        {
+            Simulation = Experior.Core.Environment.Simulation.Physics;
+
+            Common.Mesh = new Experior.Core.Resources.EmbeddedResourceLoader(System.Reflection.Assembly.GetExecutingAssembly());
+            Common.Icon = new Experior.Core.Resources.EmbeddedImageLoader(System.Reflection.Assembly.GetExecutingAssembly());
+
+            #region Mechanisms
+
+            Add(Common.Icon.Get("Slider-Crank"), "Mechanisms", "Slider-Crank", Simulation, Create.SliderCrank);
+
+            #endregion
+        }
+
+        #endregion
+
+        #region Properties
+
+        public override ImageSource Logo => Common.Icon.Get("Logo");
+
+        #endregion
+    }
+}
