@@ -24,12 +24,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+      <None Remove="Icon\Logo.png" />
       <None Remove="Icon\TemplateAssembly.png" />
-      <None Remove="Icon\TemplateAssembly.svg" />
     </ItemGroup>
 
 	<ItemGroup>
-	  <EmbeddedResource Include="Icon\TemplateAssembly.svg" />
+	  <EmbeddedResource Include="Icon\Logo.png" />
 	</ItemGroup>
 
     <ItemGroup>

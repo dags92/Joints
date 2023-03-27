@@ -1,24 +1,56 @@
-﻿using Experior.Core.Resources;
-using System.Windows.Media;
+﻿using System.Windows.Media;
+using System.Reflection;
+using Experior.Core.Resources;
+using Experior.Plugin.Joints.Ribbon;
 
 namespace Experior.Plugin.Joints
 {
     public class Joints : Experior.Core.Plugin
     {
-        public Joints()
-            : base("MyPlugin")
+        #region Fields
+
+        private ExcelPanel _excel;
+
+        #endregion
+
+        #region Constructor
+
+        public Joints() : base("Joints")
         {
+            Common.Icon = new EmbeddedImageLoader(Assembly.GetExecutingAssembly());
+
+            if (!Experior.Core.Environment.Engine.Physics)
+            {
+                return;
+            }
+
+            Init();
         }
 
-        public override ImageSource Logo { get; } = EmbeddedResource.GetImage("Experior.png");
-    }
+        #endregion
 
-    internal static class EmbeddedResource
-    {
-        private static EmbeddedImageLoader Images { get; } = new Experior.Core.Resources.EmbeddedImageLoader();
-        private static EmbeddedResourceLoader Resource { get; } = new Experior.Core.Resources.EmbeddedResourceLoader();
+        #region Properties
 
-        public static ImageSource GetImage(string resourceFileName) => Images.Get(resourceFileName);
-        public static Experior.Core.Resources.EmbeddedResource GetResource(string resourceFileName) => Resource.Get(resourceFileName);
+        public override ImageSource Logo => Common.Icon.Get("Logo");
+
+        #endregion
+
+        #region Private Methods
+
+        private void Init()
+        {
+            _excel = new ExcelPanel();
+        }
+
+        #endregion
+
+        #region Nested Types
+
+        public class Common
+        {
+            public static EmbeddedImageLoader Icon;
+        }
+
+        #endregion
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Numerics;
 using System.Windows.Media;
@@ -18,14 +19,14 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
     /// <summary>
     /// Class <c>SliderCrank</c> depicts the dynamics of a slider-crank mechanism using D6 and Basic joints from PhysX 3.4.1
     /// </summary>
-    public class SliderCrank : Assembly
+    public class SliderCrank : Assembly, IMechanism
     {
         #region Fields
 
         private readonly SliderCrankInfo _info;
 
         private readonly List<Link> _links = new List<Link>();
-        private readonly Dictionary<string, Joint> _joints = new Dictionary<string, Joint>();
+        private readonly List<Joint> _joints = new List<Joint>();
 
         private readonly Actuators.Motors.Rotative _motor;
 
@@ -44,6 +45,9 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
         #endregion
 
         #region Public Properties
+
+        [Browsable(false)] 
+        public List<string> Joints { get; } = new List<string>();
 
         public override string Category => "Mechanisms";
 
@@ -64,10 +68,20 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
         {
             _motor.Step(deltatime);
 
-            if (_joints["Joint 1"] is D6Joint joint)
+            if (_joints[0] is D6Joint jointD6)
             {
-                joint.DriveAngularVelocity = new Vector3(_motor.CurrentSpeed, 0, 0);
+                jointD6.DriveAngularVelocity = new Vector3(_motor.CurrentSpeed, 0, 0);
             }
+        }
+
+        public Vector3 GetLinearVelocity(int joint)
+        {
+            return joint > _joints.Count ? Vector3.Zero : _joints[joint].GetRelativeLinearVelocity();
+        }
+
+        public Vector3 GetAngularVelocity(int joint)
+        {
+            return joint > _joints.Count ? Vector3.Zero : _joints[joint].GetRelativeAngularVelocity();
         }
 
         #endregion
@@ -115,6 +129,12 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
                 _links[3].LinkDynamic.Position = _links[2].LinkDynamic.Position + new Vector3(0, 0, -_links[2].LinkDynamic.Width / 2 - _links[3].LinkDynamic.Width / 2);
 
                 _links[4].LinkDynamic.Position = _links[3].LinkDynamic.Position + new Vector3(0, 0, -_links[3].LinkDynamic.Width / 2 - _links[4].LinkDynamic.Width / 2 - 0.2f);
+
+                foreach (var temp in _links)
+                {
+                    temp.LinkDynamic.Deletable = false;
+                    temp.LinkDynamic.UserDeletable = false;
+                }
             });
         }
 
@@ -140,24 +160,35 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
 
             // Creation of Joints:
 
-            _joints.Add("Joint 1", Environment.Scene.PhysXScene.CreateJoint(JointType.D6, _links[0].LinkActor, _links[0].JointLocalFrame, _links[1].LinkActor, _links[1].RelativeLocalFrame));
+            _joints.Add(Environment.Scene.PhysXScene.CreateJoint(JointType.D6, _links[0].LinkActor, _links[0].JointLocalFrame, _links[1].LinkActor, _links[1].RelativeLocalFrame));
 
-            _joints.Add("Joint 2", Environment.Scene.PhysXScene.CreateJoint(JointType.Revolute, _links[1].LinkActor, _links[1].JointLocalFrame, _links[2].LinkActor, _links[2].RelativeLocalFrame));
+            _joints.Add(Environment.Scene.PhysXScene.CreateJoint(JointType.Revolute, _links[1].LinkActor, _links[1].JointLocalFrame, _links[2].LinkActor, _links[2].RelativeLocalFrame));
 
-            _joints.Add("Joint 3", Environment.Scene.PhysXScene.CreateJoint(JointType.Spherical, _links[2].LinkActor, _links[2].JointLocalFrame, _links[3].LinkActor, _links[3].RelativeLocalFrame));
+            _joints.Add(Environment.Scene.PhysXScene.CreateJoint(JointType.Spherical, _links[2].LinkActor, _links[2].JointLocalFrame, _links[3].LinkActor, _links[3].RelativeLocalFrame));
 
-            _joints.Add("Joint 4", Environment.Scene.PhysXScene.CreateJoint(JointType.Prismatic, _links[4].LinkActor, _links[4].JointLocalFrame, _links[3].LinkActor, _links[3].RelativeLocalFrame));
+            _joints.Add(Environment.Scene.PhysXScene.CreateJoint(JointType.Prismatic, _links[4].LinkActor, _links[4].JointLocalFrame, _links[3].LinkActor, _links[3].RelativeLocalFrame));
+
+            _joints[0].Name = "D6";
+            _joints[1].Name = "Revolute";
+            _joints[2].Name = "Spherical";
+            _joints[3].Name = "Prismatic";
+
+            foreach (var temp in _joints)
+            {
+                Joints.Add(temp.Name);
+            }
         }
 
         private void ConfigureJoints()
         {
+            var count = 0;
             foreach (var item in _joints)
             {
-                item.Value.ConstraintFlags |= ConstraintFlag.Visualization;
+                item.ConstraintFlags |= ConstraintFlag.Visualization;
 
-                if (item.Key == "Joint 1")
+                if (count == 0)
                 {
-                    if (item.Value is D6Joint d6)
+                    if (item is D6Joint d6)
                     {
                         var stiffness = 1f;
                         var damping = 10000f;
@@ -166,13 +197,15 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
                         d6.SetDrive(D6Drive.Twist, new D6JointDrive(stiffness, damping, float.MaxValue, true));
                     }
                 }
-                else if (item.Key == "Joint 2")
+                else if (count == 1)
                 {
-                    if (item.Value is RevoluteJoint revolute)
+                    if (item is RevoluteJoint revolute)
                     {
                         revolute.Flags = RevoluteJointFlag.DriveFreeSpin;
                     }
                 }
+
+                count++;
             }
         }
 

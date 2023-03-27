@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<Platforms>x64</Platforms>
-		<AssemblyName>Experior.Plugin.Sample</AssemblyName>
+		<AssemblyName>Experior.Plugin.Joints</AssemblyName>
 		<RootNamespace>Experior.Plugin.Joints</RootNamespace>
 		<SatelliteResourceLanguages>en-US</SatelliteResourceLanguages>
 	</PropertyGroup>
@@ -15,6 +15,7 @@
 		<PackageId>Experior.Plugin.Sample</PackageId>
 		<Title>Experior Plugin Template</Title>
 		<Description>Experior 7.0 Plugin Template</Description>
+		<BaseOutputPath>C:\Xcelgo\Xcelgo Experior 7</BaseOutputPath>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -23,7 +24,37 @@
 	</PropertyGroup>
 
     <ItemGroup>
+      <None Remove="Icon\Excel.png" />
+      <None Remove="Icon\Play.png" />
+      <None Remove="Icon\Stop.png" />
       <None Remove="Resources\Experior.png" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <COMReference Include="Microsoft.Office.Interop.Excel">
+        <WrapperTool>tlbimp</WrapperTool>
+        <VersionMinor>9</VersionMinor>
+        <VersionMajor>1</VersionMajor>
+        <Guid>00020813-0000-0000-c000-000000000046</Guid>
+        <Lcid>0</Lcid>
+        <Isolated>false</Isolated>
+        <EmbedInteropTypes>true</EmbedInteropTypes>
+      </COMReference>
+      <COMReference Include="Microsoft.Office.Core">
+        <WrapperTool>tlbimp</WrapperTool>
+        <VersionMinor>8</VersionMinor>
+        <VersionMajor>2</VersionMajor>
+        <Guid>2df8d04c-5bfa-101b-bde5-00aa0044de52</Guid>
+        <Lcid>0</Lcid>
+        <Isolated>false</Isolated>
+        <EmbedInteropTypes>true</EmbedInteropTypes>
+      </COMReference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="Icon\Excel.png" />
+      <EmbeddedResource Include="Icon\Play.png" />
+      <EmbeddedResource Include="Icon\Stop.png" />
     </ItemGroup>
 	
     <ItemGroup>
@@ -47,6 +78,10 @@
       <Resource Include="Resources\Experior.png">
         <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       </Resource>
+    </ItemGroup>
+	
+    <ItemGroup>
+      <ProjectReference Include="..\Experior.Catalog.PhysX.Joints\Experior.Catalog.Joints.csproj" />
     </ItemGroup>
 
     <UsingTask TaskName="Experior.Build" Architecture="x64" AssemblyFile="$(EXPERIOR7_BIN)\Experior.Build.dll" />
