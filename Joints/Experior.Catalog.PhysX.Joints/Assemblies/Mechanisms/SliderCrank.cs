@@ -38,6 +38,9 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
         {
             _info = info;
 
+            var sphere = new Experior.Core.Parts.Sphere(Colors.Black, 0.015f, 8);
+            Add(sphere, new Vector3(0f, 0.2f, 0f));
+
             _motor = Rotative.Create();
             Add(_motor);
         }
@@ -82,6 +85,16 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
         public Vector3 GetAngularVelocity(int joint)
         {
             return joint > _joints.Count ? Vector3.Zero : _joints[joint].GetRelativeAngularVelocity();
+        }
+
+        public Vector3 GetLinearForce(int joint)
+        {
+            return joint > _joints.Count ? Vector3.Zero : _joints[joint].Constraint.LinearForce;
+        }
+
+        public Vector3 GetAngularForce(int joint)
+        {
+            return joint > _joints.Count ? Vector3.Zero : _joints[joint].Constraint.AngularForce;
         }
 
         #endregion

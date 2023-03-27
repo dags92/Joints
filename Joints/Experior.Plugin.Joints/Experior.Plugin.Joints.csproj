@@ -25,6 +25,7 @@
 
     <ItemGroup>
       <None Remove="Icon\Excel.png" />
+      <None Remove="Icon\Graph.png" />
       <None Remove="Icon\Play.png" />
       <None Remove="Icon\Stop.png" />
       <None Remove="Resources\Experior.png" />
@@ -53,6 +54,7 @@
 
     <ItemGroup>
       <EmbeddedResource Include="Icon\Excel.png" />
+      <EmbeddedResource Include="Icon\Graph.png" />
       <EmbeddedResource Include="Icon\Play.png" />
       <EmbeddedResource Include="Icon\Stop.png" />
     </ItemGroup>
@@ -71,6 +73,8 @@
             <Private>False</Private>
         </Reference>
         <Reference Include="PresentationCore" />
+        <Reference Include="System.Windows.Forms" />
+        <Reference Include="System.Windows.Forms.DataVisualization" />
         <Reference Include="WindowsBase" />
     </ItemGroup>
 	

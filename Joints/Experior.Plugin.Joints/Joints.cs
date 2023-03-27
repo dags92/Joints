@@ -10,6 +10,7 @@ namespace Experior.Plugin.Joints
         #region Fields
 
         private ExcelPanel _excel;
+        private ChartPanel _chart;
 
         #endregion
 
@@ -39,6 +40,7 @@ namespace Experior.Plugin.Joints
 
         private void Init()
         {
+            _chart = new ChartPanel();
             _excel = new ExcelPanel();
         }
 
