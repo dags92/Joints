@@ -4,7 +4,7 @@ using Experior.Core;
 using Experior.Core.Loads;
 using Experior.Core.Parts;
 
-namespace Experior.Catalog.Joints.Assemblies.Mechanisms
+namespace Experior.Catalog.Joints.Assemblies
 {
     public class Link
     {

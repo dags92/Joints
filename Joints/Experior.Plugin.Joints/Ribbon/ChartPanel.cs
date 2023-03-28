@@ -1,4 +1,5 @@
 ﻿using System;
+using Experior.Catalog.Joints.Assemblies;
 using Experior.Core.Assemblies;
 using Experior.Plugin.Joints.GUI.Chart;
 using Environment = Experior.Core.Environment;
@@ -64,11 +65,11 @@ namespace Experior.Plugin.Joints.Ribbon
             _chartWindowHandler = null;
         }
 
-        private Experior.Catalog.Joints.Assemblies.Mechanisms.IMechanism FetchSelectedAssembly()
+        private IMechanism FetchSelectedAssembly()
         {
             foreach (var item in Assembly.Items)
             {
-                if (item.Selected && item is Experior.Catalog.Joints.Assemblies.Mechanisms.IMechanism mechanism)
+                if (item.Selected && item is IMechanism mechanism)
                 {
                     return mechanism;
                 }

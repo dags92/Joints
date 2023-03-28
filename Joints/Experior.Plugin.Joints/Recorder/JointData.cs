@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media;
-using Experior.Catalog.Joints.Assemblies.Mechanisms;
+using Experior.Catalog.Joints.Assemblies;
 using Experior.Core.Assemblies;
 using Experior.Interfaces;
 using Experior.Plugin.Joints.DataHandler;
@@ -54,7 +54,7 @@ namespace Experior.Plugin.Joints.Recorder
                 return false;
             }
 
-            foreach (var name in _mechanism.Joints)
+            foreach (var name in _mechanism.JointId)
             {
                 _jointsData.Add(new JointModel(name));
             }
@@ -177,7 +177,7 @@ namespace Experior.Plugin.Joints.Recorder
                 return;
             }
 
-            for (var i = 0; i < _mechanism.Joints.Count; i++)
+            for (var i = 0; i < _mechanism.JointId.Count; i++)
             {
                 _jointsData[i].AddLinearVelocity(_mechanism.GetLinearVelocity(i));
                 _jointsData[i].AddAngularVelocity(_mechanism.GetAngularVelocity(i));

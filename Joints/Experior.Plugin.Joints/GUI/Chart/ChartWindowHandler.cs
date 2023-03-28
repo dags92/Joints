@@ -1,4 +1,4 @@
-﻿using Experior.Catalog.Joints.Assemblies.Mechanisms;
+﻿using Experior.Catalog.Joints.Assemblies;
 using System;
 
 namespace Experior.Plugin.Joints.GUI.Chart

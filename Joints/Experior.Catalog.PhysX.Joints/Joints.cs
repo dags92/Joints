@@ -19,6 +19,18 @@ namespace Experior.Catalog.Joints
             Common.Mesh = new Experior.Core.Resources.EmbeddedResourceLoader(System.Reflection.Assembly.GetExecutingAssembly());
             Common.Icon = new Experior.Core.Resources.EmbeddedImageLoader(System.Reflection.Assembly.GetExecutingAssembly());
 
+            #region Basic Joints
+
+            Add(Common.Icon.Get("Slider-Crank"), "Basic Joints", "Revolute", Simulation, Create.Revolute);
+
+            #endregion
+
+            #region D6 Joints
+
+            Add(Common.Icon.Get("Slider-Crank"), "D6 Joints", "Revolute", Simulation, Create.D6Revolute);
+
+            #endregion
+
             #region Mechanisms
 
             Add(Common.Icon.Get("Slider-Crank"), "Mechanisms", "Slider-Crank", Simulation, Create.SliderCrank);

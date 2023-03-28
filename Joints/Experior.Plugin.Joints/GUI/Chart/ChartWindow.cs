@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Timers;
 using System.Windows.Forms;
-using Experior.Catalog.Joints.Assemblies.Mechanisms;
+using Experior.Catalog.Joints.Assemblies;
 
 namespace Experior.Plugin.Joints.GUI.Chart
 {
@@ -119,10 +119,8 @@ namespace Experior.Plugin.Joints.GUI.Chart
             _inputTimer.AutoReset = false;
             _inputTimer.Elapsed += InputTimerOnElapsed;
 
-            // Enhance Visualization of Enum values:
-
             // Joints:
-            _mechanism.Joints.ForEach(a => JointName.Items.Add(a));
+            _mechanism.JointId.ForEach(a => JointName.Items.Add(a));
             JointName.SelectedIndex = 0;
 
             // Data Types:

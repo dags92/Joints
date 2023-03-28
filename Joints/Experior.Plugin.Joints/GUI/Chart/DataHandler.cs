@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 using System.Windows.Forms.DataVisualization.Charting;
-using Experior.Catalog.Joints.Assemblies.Mechanisms;
+using Experior.Catalog.Joints.Assemblies;
 using Experior.Core;
 
 namespace Experior.Plugin.Joints.GUI.Chart
@@ -111,7 +111,7 @@ namespace Experior.Plugin.Joints.GUI.Chart
 
         private int GetJointIndex()
         {
-            var result = _mechanism.Joints.IndexOf(_window.Joint);
+            var result = _mechanism.JointId.IndexOf(_window.Joint);
 
             return result < 0 ? 0 : result;
         }

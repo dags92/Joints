@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Numerics;
 
-namespace Experior.Catalog.Joints.Assemblies.Mechanisms
+namespace Experior.Catalog.Joints.Assemblies
 {
     public interface IMechanism
     {
         string Name { get; }
 
-        List<string> Joints { get; }
+        List<string> JointId { get; }
 
         Vector3 GetLinearVelocity(int joint);
 

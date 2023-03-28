@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms.DataVisualization.Charting;
 using Experior.Catalog.Joints.Actuators.Motors;
-using Experior.Catalog.Joints.Assemblies.Mechanisms;
+using Experior.Catalog.Joints.Assemblies;
 
 namespace Experior.Plugin.Joints.GUI.Chart
 {
