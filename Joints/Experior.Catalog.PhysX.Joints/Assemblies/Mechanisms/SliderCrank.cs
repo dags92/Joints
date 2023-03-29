@@ -157,6 +157,12 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
                 temp.LinkDynamic.Deletable = false;
                 temp.LinkDynamic.UserDeletable = false;
             }
+
+            LinkId.Add("Motor");
+            LinkId.Add("Bar-1");
+            LinkId.Add("Bar-2");
+            LinkId.Add("Slider");
+            LinkId.Add("Chamber");
         }
 
         protected override void CreateJoints()

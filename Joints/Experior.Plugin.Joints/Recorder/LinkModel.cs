@@ -3,7 +3,7 @@ using System.Numerics;
 
 namespace Experior.Plugin.Joints.Recorder
 {
-    public class JointModel //TODO: ITERATOR PATTERN ?
+    public class LinkModel
     {
         #region Fields
 
@@ -11,15 +11,11 @@ namespace Experior.Plugin.Joints.Recorder
 
         private readonly List<Vector3> _angularVelocity = new List<Vector3>();
 
-        private readonly List<Vector3> _linearForce = new List<Vector3>();
-
-        private readonly List<Vector3> _angularForce = new List<Vector3>();
-
         #endregion
 
         #region Constructor
 
-        public JointModel(string name)
+        public LinkModel(string name)
         {
             Name = name;
         }
@@ -52,26 +48,6 @@ namespace Experior.Plugin.Joints.Recorder
         public List<Vector3> GetAngularVelocity()
         {
             return _angularVelocity;
-        }
-
-        public void AddLinearForce(Vector3 velocity)
-        {
-            _linearForce.Add(velocity);
-        }
-
-        public void AddAngularForce(Vector3 velocity)
-        {
-            _angularForce.Add(velocity);
-        }
-
-        public List<Vector3> GetLinearForce()
-        {
-            return _linearForce;
-        }
-
-        public List<Vector3> GetAngularForce()
-        {
-            return _angularForce;
         }
 
         #endregion

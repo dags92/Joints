@@ -101,7 +101,7 @@ namespace Experior.Plugin.Joints.GUI.Chart
 
         private void AxisModified(object sender, ChartWindow.Axes e)
         {
-            _dataPoints.Points.Clear();
+            CleanChart();
         }
 
         private void CleanChart() // TODO: STOP SIMULATION ??
@@ -123,16 +123,16 @@ namespace Experior.Plugin.Joints.GUI.Chart
             switch (_window.ChartDataType)
             {
                 case ChartWindow.ChartDataTypes.Angular_Velocity:
-                    return GetAxisValue(_mechanism.GetAngularVelocity(index));
+                    return GetAxisValue(_mechanism.GetJointAngularVelocity(index));
 
                 case ChartWindow.ChartDataTypes.Linear_Force:
-                    return GetAxisValue(_mechanism.GetLinearForce(index));
+                    return GetAxisValue(_mechanism.GetJointLinearForce(index));
 
                 case ChartWindow.ChartDataTypes.Angular_Force:
-                    return GetAxisValue(_mechanism.GetAngularForce(index));
+                    return GetAxisValue(_mechanism.GetJointAngularForce(index));
 
                 default:
-                    return GetAxisValue(_mechanism.GetLinearVelocity(index));
+                    return GetAxisValue(_mechanism.GetJointLinearVelocity(index));
             }
         }
 

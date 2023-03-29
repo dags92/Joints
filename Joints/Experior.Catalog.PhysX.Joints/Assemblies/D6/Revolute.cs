@@ -134,6 +134,9 @@ namespace Experior.Catalog.Joints.Assemblies.D6
                 temp.LinkDynamic.Deletable = false;
                 temp.LinkDynamic.UserDeletable = false;
             }
+
+            LinkId.Add("Motor");
+            LinkId.Add("Bar");
         }
 
         protected override void CreateJoints()

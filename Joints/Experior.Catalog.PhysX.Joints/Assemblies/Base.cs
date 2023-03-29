@@ -37,6 +37,8 @@ namespace Experior.Catalog.Joints.Assemblies
         [Browsable(false)]
         public List<string> JointId { get; } = new List<string>();
 
+        public List<string> LinkId { get; } = new List<string>();
+
         #endregion
 
         #region Protected Properties
@@ -56,24 +58,34 @@ namespace Experior.Catalog.Joints.Assemblies
             Build();
         }
 
-        public Vector3 GetLinearVelocity(int joint)
+        public Vector3 GetJointLinearVelocity(int joint)
         {
             return joint > _joints.Count ? Vector3.Zero : _joints[joint].GetRelativeLinearVelocity();
         }
 
-        public Vector3 GetAngularVelocity(int joint)
+        public Vector3 GetJointAngularVelocity(int joint)
         {
             return joint > _joints.Count ? Vector3.Zero : _joints[joint].GetRelativeAngularVelocity();
         }
 
-        public Vector3 GetLinearForce(int joint)
+        public Vector3 GetJointLinearForce(int joint)
         {
             return joint > _joints.Count ? Vector3.Zero : _joints[joint].Constraint.LinearForce;
         }
 
-        public Vector3 GetAngularForce(int joint)
+        public Vector3 GetJointAngularForce(int joint)
         {
             return joint > _joints.Count ? Vector3.Zero : _joints[joint].Constraint.AngularForce;
+        }
+
+        public Vector3 GetLinkLinearVelocity(int link)
+        {
+            return link > _links.Count ? Vector3.Zero : _links[link].LinkDynamic.LinearVelocity;
+        }
+
+        public Vector3 GetLinkAngularVelocity(int link)
+        {
+            return link > _links.Count ? Vector3.Zero : _links[link].LinkDynamic.AngularVelocity;
         }
 
         #endregion

@@ -9,12 +9,18 @@ namespace Experior.Catalog.Joints.Assemblies
 
         List<string> JointId { get; }
 
-        Vector3 GetLinearVelocity(int joint);
+        List<string> LinkId { get; }
 
-        Vector3 GetAngularVelocity(int joint);
+        Vector3 GetJointLinearVelocity(int joint);
 
-        Vector3 GetLinearForce(int joint);
+        Vector3 GetJointAngularVelocity(int joint);
 
-        Vector3 GetAngularForce(int joint);
+        Vector3 GetJointLinearForce(int joint);
+
+        Vector3 GetJointAngularForce(int joint);
+
+        Vector3 GetLinkLinearVelocity(int link);
+
+        Vector3 GetLinkAngularVelocity(int link);
     }
 }

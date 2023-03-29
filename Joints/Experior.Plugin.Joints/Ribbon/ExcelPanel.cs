@@ -8,7 +8,7 @@ namespace Experior.Plugin.Joints.Ribbon
     {
         #region Fields
 
-        private readonly JointData _recorder;
+        private readonly MechanismData _recorder;
 
         #endregion
 
@@ -16,7 +16,7 @@ namespace Experior.Plugin.Joints.Ribbon
 
         public ExcelPanel()
         {
-            _recorder = new JointData();
+            _recorder = new MechanismData();
             _recorder.Exported += OnExported;
             _recorder.AssemblyDeleted += OnAssemblyDeleted;
         }
