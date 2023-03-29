@@ -35,6 +35,7 @@ namespace Experior.Catalog.Joints
             #region Mechanisms
 
             Add(Common.Icon.Get("Slider-Crank"), "Mechanisms", "Slider-Crank", Simulation, Create.SliderCrank);
+            Add(Common.Icon.Get("Slider-Crank"), "Mechanisms", "Slider-Crank Inverted", Simulation, Create.SliderCrankInverted);
 
             #endregion
         }

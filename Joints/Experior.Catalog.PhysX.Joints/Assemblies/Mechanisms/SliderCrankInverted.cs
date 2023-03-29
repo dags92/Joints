@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Numerics;
-using System.Windows.Input;
 using System.Windows.Media;
 
 using PhysX;
@@ -13,32 +12,31 @@ using Colors = System.Windows.Media.Colors;
 using Environment = Experior.Core.Environment;
 using Experior.Core.Properties;
 using System.ComponentModel;
+using Experior.Catalog.Joints.Actuators;
+using Experior.Core.Mathematics;
 
 namespace Experior.Catalog.Joints.Assemblies.Mechanisms
 {
-    /// <summary>
-    /// Class <c>SliderCrank</c> depicts the dynamics of a slider-crank mechanism using D6 and Basic joints from PhysX 3.4.1
-    /// </summary>
-    public class SliderCrank : Base
+    public class SliderCrankInverted : Base
     {
         #region Fields
 
-        private readonly SliderCrankInfo _info;
+        private readonly SliderCrankInvertedInfo _info;
 
-        private readonly Actuators.Motors.Rotative _motor;
+        private readonly Actuators.Motors.Linear _motor;
 
         #endregion
 
         #region Constructor
 
-        public SliderCrank(SliderCrankInfo info) : base(info)
+        public SliderCrankInverted(SliderCrankInvertedInfo info) : base(info)
         {
             _info = info;
 
             var sphere = new Experior.Core.Parts.Sphere(Colors.Black, 0.015f, 8);
             Add(sphere, new Vector3(0f, 0.2f, 0f));
 
-            _motor = Rotative.Create();
+            _motor = Linear.Create();
             Add(_motor);
         }
 
@@ -98,17 +96,35 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
             base.Inserted();
 
             Log.Write($"Slider-Crank Mechanism \n" +
-                      $"1. Drive is located on the Crank \n" +
-                      $"2. Use the PLC signals Forward or Backward to move the mechanism", System.Windows.Media.Colors.LimeGreen, LogFilter.Communication);
+                      $"1. Drive is located on the Slider \n" +
+                      $"2. Only use the PLC Forward motor signal to move the slider", System.Windows.Media.Colors.LimeGreen, LogFilter.Communication);
         }
 
         public override void Step(float deltatime)
         {
             _motor.Step(deltatime);
 
-            if (Joints[0] is D6Joint jointD6)
+            if (Joints[3] is D6Joint jointD6)
             {
-                jointD6.DriveAngularVelocity = new Vector3(_motor.CurrentSpeed, 0, 0);
+                Trigonometry.GlobalToLocal(Position, Orientation, Links[3].LinkDynamic.Position,
+                    Links[3].LinkDynamic.Orientation, out var pos, out var ori);
+
+                if (_motor.Command == AuxiliaryData.Commands.Forward)
+                {
+                    if (pos.Z <= -1f)
+                    {
+                        _motor.SwitchDirection();
+                    }
+                }
+                else if (_motor.Command == AuxiliaryData.Commands.Backward)
+                {
+                    if (pos.Z >= -0.5f)
+                    {
+                        _motor.SwitchDirection();
+                    }
+                }
+
+                jointD6.DriveLinearVelocity = new Vector3(_motor.CurrentSpeed, 0, 0);
             }
         }
 
@@ -177,13 +193,13 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
 
             // Creation of Joints:
 
-            Joints.Add(Environment.Scene.PhysXScene.CreateJoint(JointType.D6, Links[0].LinkActor, Links[0].JointLocalFrame, Links[1].LinkActor, Links[1].RelativeLocalFrame));
+            Joints.Add(Environment.Scene.PhysXScene.CreateJoint(JointType.Revolute, Links[0].LinkActor, Links[0].JointLocalFrame, Links[1].LinkActor, Links[1].RelativeLocalFrame));
 
             Joints.Add(Environment.Scene.PhysXScene.CreateJoint(JointType.Revolute, Links[1].LinkActor, Links[1].JointLocalFrame, Links[2].LinkActor, Links[2].RelativeLocalFrame));
 
             Joints.Add(Environment.Scene.PhysXScene.CreateJoint(JointType.Spherical, Links[2].LinkActor, Links[2].JointLocalFrame, Links[3].LinkActor, Links[3].RelativeLocalFrame));
 
-            Joints.Add(Environment.Scene.PhysXScene.CreateJoint(JointType.Prismatic, Links[4].LinkActor, Links[4].JointLocalFrame, Links[3].LinkActor, Links[3].RelativeLocalFrame));
+            Joints.Add(Environment.Scene.PhysXScene.CreateJoint(JointType.D6, Links[4].LinkActor, Links[4].JointLocalFrame, Links[3].LinkActor, Links[3].RelativeLocalFrame));
 
             Joints[0].Name = "D6";
             Joints[1].Name = "Revolute";
@@ -203,11 +219,11 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
             {
                 item.ConstraintFlags |= ConstraintFlag.Visualization;
 
-                if (count == 0)
+                if (count == 3)
                 {
                     UpdateDrive();
                 }
-                else if (count == 1)
+                else if (count == 0 || count == 1)
                 {
                     if (item is RevoluteJoint revolute)
                     {
@@ -227,10 +243,10 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
         {
             Experior.Core.Environment.InvokeIfRequired(() =>
             {
-                if (Joints[0] is PhysX.D6Joint d6)
+                if (Joints[3] is PhysX.D6Joint d6)
                 {
-                    d6.SetMotion(D6Axis.Twist, D6Motion.Free);
-                    d6.SetDrive(D6Drive.Twist, new D6JointDrive(Stiffness, Damping, float.MaxValue, Acceleration));
+                    d6.SetMotion(D6Axis.X, D6Motion.Limited);
+                    d6.SetDrive(D6Drive.X, new D6JointDrive(Stiffness, Damping, float.MaxValue, Acceleration));
                 }
             });
         }
@@ -238,8 +254,8 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
         #endregion
     }
 
-    [Serializable, XmlInclude(typeof(SliderCrankInfo)), XmlType(TypeName = "Experior.Catalog.PhysX.Joints.Assemblies.Mechanisms.SliderCrankInfo")]
-    public class SliderCrankInfo : BaseInfo
+    [Serializable, XmlInclude(typeof(SliderCrankInvertedInfo)), XmlType(TypeName = "Experior.Catalog.Joints.Assemblies.Mechanisms.SliderCrankInvertedInfo")]
+    public class SliderCrankInvertedInfo : BaseInfo
     {
         public bool Acceleration { get; set; } = true;
 

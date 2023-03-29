@@ -71,6 +71,18 @@ namespace Experior.Catalog.Joints
             return assembly;
         }
 
+        public static Assembly SliderCrankInverted(string title, string subtitle, object properties)
+        {
+            var info = new SliderCrankInvertedInfo()
+            {
+                name = Experior.Core.Assemblies.Assembly.GetValidName("Slider Crank"),
+                height = 3f
+            };
+
+            var assembly = new SliderCrankInverted(info);
+            return assembly;
+        }
+
         #endregion
     }
 }
