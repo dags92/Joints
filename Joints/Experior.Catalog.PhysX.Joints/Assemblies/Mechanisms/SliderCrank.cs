@@ -11,6 +11,8 @@ using Experior.Core.Loads;
 using Experior.Interfaces;
 using Colors = System.Windows.Media.Colors;
 using Environment = Experior.Core.Environment;
+using Experior.Core.Properties;
+using System.ComponentModel;
 
 namespace Experior.Catalog.Joints.Assemblies.Mechanisms
 {
@@ -43,6 +45,45 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
         #endregion
 
         #region Public Properties
+
+        [Category("Motion")]
+        [DisplayName("Stiffness")]
+        [PropertyOrder(0)]
+        public float Stiffness
+        {
+            get => _info.Stiffness;
+            set
+            {
+                _info.Stiffness = value;
+                UpdateDrive();
+            }
+        }
+
+        [Category("Motion")]
+        [DisplayName("Damping")]
+        [PropertyOrder(1)]
+        public float Damping
+        {
+            get => _info.Damping;
+            set
+            {
+                _info.Damping = value;
+                UpdateDrive();
+            }
+        }
+
+        [Category("Motion")]
+        [DisplayName("Acceleration")]
+        [PropertyOrder(2)]
+        public bool Acceleration
+        {
+            get => _info.Acceleration;
+            set
+            {
+                _info.Acceleration = value;
+                UpdateDrive();
+            }
+        }
 
         public override string Category => "Mechanisms";
 
@@ -170,11 +211,8 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
                 {
                     if (item is D6Joint d6)
                     {
-                        var stiffness = 1f;
-                        var damping = 10000f;
-
                         d6.SetMotion(D6Axis.Twist, D6Motion.Free);
-                        d6.SetDrive(D6Drive.Twist, new D6JointDrive(stiffness, damping, float.MaxValue, true));
+                        d6.SetDrive(D6Drive.Twist, new D6JointDrive(Stiffness, Damping, float.MaxValue, Acceleration));
                     }
                 }
                 else if (count == 1)
@@ -190,11 +228,30 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
         }
 
         #endregion
+
+        #region Private Methods
+
+        private void UpdateDrive()
+        {
+            Experior.Core.Environment.InvokeIfRequired(() =>
+            {
+                if (Joints[0] is PhysX.D6Joint d6)
+                {
+                    d6.SetDrive(D6Drive.Twist, new D6JointDrive(Stiffness, Damping, float.MaxValue, Acceleration));
+                }
+            });
+        }
+
+        #endregion
     }
 
     [Serializable, XmlInclude(typeof(SliderCrankInfo)), XmlType(TypeName = "Experior.Catalog.PhysX.Joints.Assemblies.Mechanisms.SliderCrankInfo")]
     public class SliderCrankInfo : BaseInfo
     {
+        public bool Acceleration { get; set; } = true;
 
+        public float Stiffness { get; set; } = 1f;
+
+        public float Damping { get; set; } = 10000f;
     }
 }

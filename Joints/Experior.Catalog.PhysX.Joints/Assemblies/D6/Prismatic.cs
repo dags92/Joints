@@ -1,5 +1,6 @@
 ﻿using Experior.Catalog.Joints.Actuators.Motors;
 using Experior.Core.Loads;
+using Experior.Core.Properties;
 using Experior.Interfaces;
 using PhysX;
 using System;
@@ -9,29 +10,26 @@ using System.Numerics;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Xml.Serialization;
-using Experior.Core;
-using Experior.Core.Properties;
-using Colors = System.Windows.Media.Colors;
 
 namespace Experior.Catalog.Joints.Assemblies.D6
 {
-    public class Revolute : Base
+    public class Prismatic : Base
     {
         #region Fields
 
-        private readonly RevoluteInfo _info;
+        private readonly PrismaticInfo _info;
 
-        private readonly Actuators.Motors.Rotative _motor;
+        private readonly Actuators.Motors.Linear _motor;
 
         #endregion
 
         #region Constructor
 
-        public Revolute(RevoluteInfo info) : base(info)
+        public Prismatic(PrismaticInfo info) : base(info)
         {
             _info = info;
-         
-            _motor = Rotative.Create();
+
+            _motor = Linear.Create();
             Add(_motor);
         }
 
@@ -80,7 +78,7 @@ namespace Experior.Catalog.Joints.Assemblies.D6
 
         public override string Category => "D6 Joints";
 
-        public override ImageSource Image => Common.Icon.Get("Revolute");
+        public override ImageSource Image => Common.Icon?.Get("Prismatic");
 
         #endregion
 
@@ -92,7 +90,7 @@ namespace Experior.Catalog.Joints.Assemblies.D6
 
             if (Joints[0] is D6Joint jointD6)
             {
-                jointD6.DriveAngularVelocity = new Vector3(_motor.CurrentSpeed, 0, 0);
+                jointD6.DriveLinearVelocity = new Vector3(_motor.CurrentSpeed, 0, 0);
             }
         }
 
@@ -122,12 +120,10 @@ namespace Experior.Catalog.Joints.Assemblies.D6
         protected override void CreateLinks()
         {
             Links.Add(new Link(Load.CreateBox(0.1f, 0.1f, 0.1f, Colors.DarkRed), true));
-
-            const float linkL = 0.025f;
-            Links.Add(new Link(Load.CreateBox(linkL, linkL, 0.4f, Colors.Gray), false));
+            Links.Add(new Link(Load.CreateBox(0.1f, 0.1f, 0.1f, Colors.Gray), false));
 
             Links[0].LinkDynamic.Position = Position;
-            Links[1].LinkDynamic.Position = Links[0].LinkDynamic.Position + new Vector3(-Links[0].LinkDynamic.Length / 2 - Links[1].LinkDynamic.Length / 2, 0, -Links[1].LinkDynamic.Width / 2 + 0.02f);
+            Links[1].LinkDynamic.Position = Links[0].LinkDynamic.Position;
 
             foreach (var temp in Links)
             {
@@ -144,10 +140,9 @@ namespace Experior.Catalog.Joints.Assemblies.D6
                 return;
             }
 
-            Links[1].RelativeLocalFrame = Matrix4x4.CreateTranslation(Links[0].LinkDynamic.Length / 2 + Links[1].LinkDynamic.Length / 2, 0, -Links[1].LinkDynamic.Width / 2 + Links[0].LinkDynamic.Width / 2);
             Joints.Add(Core.Environment.Scene.PhysXScene.CreateJoint(JointType.D6, Links[0].LinkActor, Links[0].JointLocalFrame, Links[1].LinkActor, Links[1].RelativeLocalFrame));
 
-            Joints[0].Name = "Revolute";
+            Joints[0].Name = "Prismatic";
             JointId.Add(Joints[0].Name);
         }
 
@@ -157,8 +152,8 @@ namespace Experior.Catalog.Joints.Assemblies.D6
             {
                 Joints[0].ConstraintFlags |= ConstraintFlag.Visualization;
 
-                d6.SetMotion(D6Axis.Twist, D6Motion.Free);
-                d6.SetDrive(D6Drive.Twist, new D6JointDrive(Stiffness, Damping, float.MaxValue, Acceleration));
+                d6.SetMotion(D6Axis.X, D6Motion.Free);
+                d6.SetDrive(D6Drive.X, new D6JointDrive(Stiffness, Damping, float.MaxValue, Acceleration));
             }
         }
 
@@ -172,7 +167,7 @@ namespace Experior.Catalog.Joints.Assemblies.D6
             {
                 if (Joints[0] is PhysX.D6Joint d6)
                 {
-                    d6.SetDrive(D6Drive.Twist, new D6JointDrive(Stiffness, Damping, float.MaxValue, Acceleration));
+                    d6.SetDrive(D6Drive.X, new D6JointDrive(Stiffness, Damping, float.MaxValue, Acceleration));
                 }
             });
         }
@@ -180,8 +175,8 @@ namespace Experior.Catalog.Joints.Assemblies.D6
         #endregion
     }
 
-    [Serializable, XmlInclude(typeof(RevoluteInfo)), XmlType(TypeName = "Experior.Catalog.Joints.Assemblies.D6.RevoluteInfo")]
-    public class RevoluteInfo : BaseInfo
+    [Serializable, XmlInclude(typeof(PrismaticInfo)), XmlType(TypeName = "Experior.Catalog.Joints.Assemblies.D6.PrismaticInfo")]
+    public class PrismaticInfo : BaseInfo
     {
         public bool Acceleration { get; set; } = true;
 

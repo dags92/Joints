@@ -98,11 +98,11 @@ namespace Experior.Plugin.Joints.Recorder
                 {
                     if (count == 0)
                     {
-                        workSheet.Cells[row, col] = "Time (s)";
+                        workSheet.Cells[row + 1, col] = "Time (s)";
 
                         foreach (var time in _time)
                         {
-                            workSheet.Cells[row + 1, col] = time;
+                            workSheet.Cells[row + 2, col] = time;
                             row++;
                         }
                     }
@@ -188,7 +188,10 @@ namespace Experior.Plugin.Joints.Recorder
 
         private void AssemblyOnDisposing(Assembly sender)
         {
-            _assembly.OnDisposing -= AssemblyOnDisposing;
+            if (_assembly != null)
+            {
+                _assembly.OnDisposing -= AssemblyOnDisposing;
+            }
 
             Clean();
             AssemblyDeleted?.Invoke(this, EventArgs.Empty);

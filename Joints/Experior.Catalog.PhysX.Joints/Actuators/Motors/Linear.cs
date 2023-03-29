@@ -56,7 +56,7 @@ namespace Experior.Catalog.Joints.Actuators.Motors
             var info = new LinearInfo()
             {
                 name = Experior.Core.Motors.Motor.GetValidName("Joint - Linear Motor"),
-                BaseSpeed = 0.01f // m/s
+                BaseSpeed = 0.2f // m/s
             };
 
             return new Linear(info);

@@ -28,6 +28,7 @@ namespace Experior.Catalog.Joints
             #region D6 Joints
 
             Add(Common.Icon.Get("Slider-Crank"), "D6 Joints", "Revolute", Simulation, Create.D6Revolute);
+            Add(Common.Icon.Get("Slider-Crank"), "D6 Joints", "Prismatic", Simulation, Create.D6Prismatic);
 
             #endregion
 

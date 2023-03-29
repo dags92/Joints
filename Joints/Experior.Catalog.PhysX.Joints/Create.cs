@@ -43,6 +43,18 @@ namespace Experior.Catalog.Joints
             return assembly;
         }
 
+        public static Assembly D6Prismatic(string title, string subtitle, object properties)
+        {
+            var info = new Assemblies.D6.PrismaticInfo()
+            {
+                name = Experior.Core.Assemblies.Assembly.GetValidName("D6 - Prismatic"),
+                height = 3f
+            };
+
+            var assembly = new Assemblies.D6.Prismatic(info);
+            return assembly;
+        }
+
         #endregion
 
         #region Mechanisms
