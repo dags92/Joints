@@ -124,7 +124,7 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
 
         #endregion
 
-        #region Private Methods
+        #region Protected Methods
 
         protected override void CreateLinks()
         {

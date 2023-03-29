@@ -154,16 +154,42 @@ namespace Experior.Catalog.Joints.Actuators.Motors
         }
 
         /// <summary>
+        /// Gets or sets the Running PLC Output signal.
+        /// This instance move the motor in forward direction when its value is true.
+        /// </summary>
+        [Category("PLC Input")]
+        [DisplayName(@"Running")]
+        [PropertyOrder(1)]
+        public Output OutputRunning
+        {
+            get => _info.OutputRunning;
+            set => _info.OutputRunning = value;
+        }
+
+        /// <summary>
         /// Gets or sets the Forward PLC Input signal.
         /// This instance move the motor in forward direction when its value is true.
         /// </summary>
         [Category("PLC Output")]
-        [DisplayName(@"Activate")]
+        [DisplayName(@"Forward")]
         [PropertyOrder(1)]
-        public Input InputActivate
+        public Input InputForward
         {
-            get => _info.InputActivate;
-            set => _info.InputActivate = value;
+            get => _info.InputForward;
+            set => _info.InputForward = value;
+        }
+
+        /// <summary>
+        /// Gets or sets the Backward PLC Input signal.
+        /// This instance move the motor in forward direction when its value is true.
+        /// </summary>
+        [Category("PLC Output")]
+        [DisplayName(@"Backward")]
+        [PropertyOrder(2)]
+        public Input InputBackward
+        {
+            get => _info.InputBackward;
+            set => _info.InputBackward = value;
         }
 
         /// <summary>
@@ -352,8 +378,11 @@ namespace Experior.Catalog.Joints.Actuators.Motors
 
         public override void Dispose()
         {
-            _info.InputActivate.On -= InputActivateOn;
-            _info.InputActivate.Off -= InputActivateOff;
+            _info.InputForward.On -= InputForwardOn;
+            _info.InputForward.Off -= InputForwardOff;
+
+            _info.InputBackward.On -= InputBackwardOn;
+            _info.InputBackward.Off -= InputBackwardOff;
 
             base.Dispose();
         }
@@ -386,20 +415,34 @@ namespace Experior.Catalog.Joints.Actuators.Motors
 
         private void SetPlcSignals()
         {
-            if (_info.InputActivate == null)
+            if (_info.OutputRunning == null)
             {
-                _info.InputActivate = new Input { DataSize = DataSize.BOOL, Description = "Activate Motor", Symbol = "Activate" };
+                _info.OutputRunning = new Output() { DataSize = DataSize.BOOL, Description = "Motor Active", Symbol = "Running" };
             }
+            Add(_info.OutputRunning);
 
-            Add(_info.InputActivate);
+            if (_info.InputForward == null)
+            {
+                _info.InputForward = new Input { DataSize = DataSize.BOOL, Description = "Move Forward", Symbol = "Forward" };
+            }
+            Add(_info.InputForward);
 
-            _info.InputActivate.On += InputActivateOn;
-            _info.InputActivate.Off += InputActivateOff;
+            _info.InputForward.On += InputForwardOn;
+            _info.InputForward.Off += InputForwardOff;
+
+            if (_info.InputBackward == null)
+            {
+                _info.InputBackward = new Input(){DataSize =  DataSize.BOOL, Description ="Move Backward", Symbol = "Backward"};
+            }
+            Add(_info.InputBackward);
+
+            _info.InputBackward.On += InputBackwardOn;
+            _info.InputBackward.Off += InputBackwardOff;
         }
 
-        private void InputActivateOn(Input sender)
+        private void InputForwardOn(Input sender)
         {
-            if (Command == AuxiliaryData.Commands.Forward && Move)
+            if (InputBackward.Active || Command == AuxiliaryData.Commands.Forward && Move)
             {
                 return;
             }
@@ -412,8 +455,41 @@ namespace Experior.Catalog.Joints.Actuators.Motors
             }
         }
 
-        private void InputActivateOff(Input sender)
+        private void InputForwardOff(Input sender)
         {
+            if (InputBackward.Active)
+            {
+                return;
+            }
+
+            if (Command != AuxiliaryData.Commands.Stop)
+            {
+                Stop();
+            }
+        }
+
+        private void InputBackwardOn(Input sender)
+        {
+            if (InputForward.Active || Command == AuxiliaryData.Commands.Backward && Move)
+            {
+                return;
+            }
+
+            Backward();
+
+            if (!Running)
+            {
+                Start();
+            }
+        }
+
+        private void InputBackwardOff(Input sender)
+        {
+            if (InputForward.Active)
+            {
+                return;
+            }
+
             if (Command != AuxiliaryData.Commands.Stop)
             {
                 Stop();
@@ -434,6 +510,10 @@ namespace Experior.Catalog.Joints.Actuators.Motors
 
         public bool UseRamp { get; set; } = true;
 
-        public Input InputActivate { get; set; }
+        public Output OutputRunning { get; set; }
+
+        public Input InputForward { get; set; }
+
+        public Input InputBackward { get; set; }
     }
 }
