@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using Experior.Interfaces;
@@ -67,7 +68,9 @@ namespace Experior.Plugin.Joints.DataHandler
         {
             try
             {
-                var fileName = _name + ".xls";
+                var date = System.DateTime.Now.ToString(CultureInfo.InvariantCulture).Replace('/', '_').Replace(':', '_').Replace(' ', '_');
+                
+                var fileName = _name + "_" + date + ".xls";
                 var path = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Desktop);
 
                 _workBook.SaveAs(path + @"\" + fileName, XlFileFormat.xlWorkbookNormal);
