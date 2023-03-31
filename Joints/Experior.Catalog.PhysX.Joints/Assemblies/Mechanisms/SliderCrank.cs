@@ -165,11 +165,11 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
 
             // Definition of Joint Local Frames and Relative Local Frames:
 
-            Links[1].RelativeLocalFrame = Matrix4x4.CreateTranslation(Links[0].LinkDynamic.Length / 2 + Links[1].LinkDynamic.Length / 2, 0, -Links[1].LinkDynamic.Width / 2 + Links[0].LinkDynamic.Width / 2);
+            Links[1].RelativeLocalFrame = Matrix4x4.CreateTranslation(Links[0].LinkDynamic.Length / 2 + Links[1].LinkDynamic.Length / 2, 0, -Links[1].LinkDynamic.Width / 2);
 
-            Links[1].JointLocalFrame = Matrix4x4.CreateTranslation(new Vector3(0, 0, Links[1].LinkDynamic.Width / 2 - 0.015f));
+            Links[1].JointLocalFrame = Matrix4x4.CreateTranslation(new Vector3(0, 0, Links[1].LinkDynamic.Width / 2));
 
-            Links[2].RelativeLocalFrame = Matrix4x4.CreateTranslation(new Vector3(Links[1].LinkDynamic.Length / 2 + Links[2].LinkDynamic.Length / 2, 0, -Links[2].LinkDynamic.Width / 2 + 0.015f));
+            Links[2].RelativeLocalFrame = Matrix4x4.CreateTranslation(new Vector3(Links[1].LinkDynamic.Length / 2 + Links[2].LinkDynamic.Length / 2, 0, -Links[2].LinkDynamic.Width / 2f));
 
             Links[2].JointLocalFrame = Matrix4x4.CreateTranslation(new Vector3(0, 0, Links[2].LinkDynamic.Width / 2));
 
