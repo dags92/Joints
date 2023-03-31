@@ -6,6 +6,7 @@ using System.Numerics;
 using System.Windows.Media;
 using Experior.Catalog.Joints.Assemblies;
 using Experior.Core.Assemblies;
+using Experior.Core.Mathematics;
 using Experior.Interfaces;
 using Experior.Plugin.Joints.DataHandler;
 using Environment = Experior.Core.Environment;
@@ -139,6 +140,7 @@ namespace Experior.Plugin.Joints.Recorder
                 _linksData[i].AddLinearVelocity(_mechanism.GetLinkLinearVelocity(i));
                 _linksData[i].AddAngularVelocity(_mechanism.GetLinkAngularVelocity(i));
                 _linksData[i].AddLocalPosition(_mechanism.GetLinkLocalPosition(i));
+                _linksData[i].AddLocalOrientation(_mechanism.GetLocalLinkOrientation(i));
             }
         }
 
@@ -199,6 +201,16 @@ namespace Experior.Plugin.Joints.Recorder
                 var linearVelocity = data.GetLinearVelocity();
                 var angularVelocity = data.GetAngularVelocity();
                 var localPosition = data.GetLocalPosition();
+                var localOrientation = new List<Vector3>();
+
+                foreach (var orientation in data.GetLocalOrientation())
+                {
+                    var yaw = Trigonometry.Yaw(orientation);
+                    var pitch = Trigonometry.Pitch(orientation);
+                    var roll = Trigonometry.Roll(orientation);
+
+                    localOrientation.Add(new Vector3(yaw, pitch, roll));
+                }
 
                 for (var i = 0; i < linearVelocity.Count; i++)
                 {
@@ -206,7 +218,9 @@ namespace Experior.Plugin.Joints.Recorder
 
                     AddVectorComponents(row, linearVelocity[i]);
                     AddVectorComponents(row, angularVelocity[i]);
+
                     AddVectorComponents(row, localPosition[i]);
+                    AddVectorComponents(row, localOrientation[i]);
 
                     info.Add(row);
                 }
@@ -251,7 +265,11 @@ namespace Experior.Plugin.Joints.Recorder
 
                 "Local Position (X)",
                 "Local Position (Y)",
-                "Local Position (Z)"
+                "Local Position (Z)",
+
+                "Local Yaw",
+                "Local Pitch",
+                "Local Roll"
             };
         }
 

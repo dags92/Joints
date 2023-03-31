@@ -26,5 +26,7 @@ namespace Experior.Catalog.Joints.Assemblies
         Vector3 GetLinkLocalPosition(int link);
 
         Vector3 GetLinkGlobalPosition(int link);
+
+        Matrix4x4 GetLocalLinkOrientation(int link);
     }
 }

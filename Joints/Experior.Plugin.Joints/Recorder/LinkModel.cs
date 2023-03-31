@@ -13,6 +13,8 @@ namespace Experior.Plugin.Joints.Recorder
 
         private readonly List<Vector3> _localPosition = new List<Vector3>();
 
+        private readonly List<Matrix4x4> _localOrientation = new List<Matrix4x4>();
+
         #endregion
 
         #region Constructor
@@ -47,6 +49,11 @@ namespace Experior.Plugin.Joints.Recorder
             _localPosition.Add(velocity);
         }
 
+        public void AddLocalOrientation(Matrix4x4 orientation)
+        {
+            _localOrientation.Add(orientation);
+        }
+
         public List<Vector3> GetLinearVelocity()
         {
             return _linearVelocity;
@@ -60,6 +67,11 @@ namespace Experior.Plugin.Joints.Recorder
         public List<Vector3> GetLocalPosition()
         {
             return _localPosition;
+        }
+
+        public List<Matrix4x4> GetLocalOrientation()
+        {
+            return _localOrientation;
         }
 
         #endregion

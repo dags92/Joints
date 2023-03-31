@@ -106,6 +106,18 @@ namespace Experior.Catalog.Joints.Assemblies
             return link > _links.Count ? Vector3.Zero : _links[link].LinkDynamic.Position;
         }
 
+        public Matrix4x4 GetLocalLinkOrientation(int link)
+        {
+            if (_links.Count < link)
+            {
+                return Matrix4x4.Identity;
+            }
+
+            Trigonometry.GlobalToLocal(Position, Orientation, _links[link].LinkDynamic.Position, _links[link].LinkDynamic.Orientation, out var pos, out var ori);
+
+            return ori;
+        }
+
         #endregion
 
         #region Protected Methods
