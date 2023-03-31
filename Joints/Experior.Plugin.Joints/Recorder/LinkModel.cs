@@ -11,6 +11,8 @@ namespace Experior.Plugin.Joints.Recorder
 
         private readonly List<Vector3> _angularVelocity = new List<Vector3>();
 
+        private readonly List<Vector3> _localPosition = new List<Vector3>();
+
         #endregion
 
         #region Constructor
@@ -40,6 +42,11 @@ namespace Experior.Plugin.Joints.Recorder
             _angularVelocity.Add(velocity);
         }
 
+        public void AddLocalPosition(Vector3 velocity)
+        {
+            _localPosition.Add(velocity);
+        }
+
         public List<Vector3> GetLinearVelocity()
         {
             return _linearVelocity;
@@ -48,6 +55,11 @@ namespace Experior.Plugin.Joints.Recorder
         public List<Vector3> GetAngularVelocity()
         {
             return _angularVelocity;
+        }
+
+        public List<Vector3> GetLocalPosition()
+        {
+            return _localPosition;
         }
 
         #endregion

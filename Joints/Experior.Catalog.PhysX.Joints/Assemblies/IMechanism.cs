@@ -22,5 +22,9 @@ namespace Experior.Catalog.Joints.Assemblies
         Vector3 GetLinkLinearVelocity(int link);
 
         Vector3 GetLinkAngularVelocity(int link);
+
+        Vector3 GetLinkLocalPosition(int link);
+
+        Vector3 GetLinkGlobalPosition(int link);
     }
 }

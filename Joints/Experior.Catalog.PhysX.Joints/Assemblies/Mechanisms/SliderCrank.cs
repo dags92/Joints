@@ -35,9 +35,6 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
         {
             _info = info;
 
-            var sphere = new Experior.Core.Parts.Sphere(Colors.Black, 0.015f, 8);
-            Add(sphere, new Vector3(0f, 0.2f, 0f));
-
             _motor = Rotative.Create();
             Add(_motor);
         }

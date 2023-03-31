@@ -138,6 +138,7 @@ namespace Experior.Plugin.Joints.Recorder
             {
                 _linksData[i].AddLinearVelocity(_mechanism.GetLinkLinearVelocity(i));
                 _linksData[i].AddAngularVelocity(_mechanism.GetLinkAngularVelocity(i));
+                _linksData[i].AddLocalPosition(_mechanism.GetLinkLocalPosition(i));
             }
         }
 
@@ -197,6 +198,7 @@ namespace Experior.Plugin.Joints.Recorder
                 // Data:
                 var linearVelocity = data.GetLinearVelocity();
                 var angularVelocity = data.GetAngularVelocity();
+                var localPosition = data.GetLocalPosition();
 
                 for (var i = 0; i < linearVelocity.Count; i++)
                 {
@@ -204,6 +206,7 @@ namespace Experior.Plugin.Joints.Recorder
 
                     AddVectorComponents(row, linearVelocity[i]);
                     AddVectorComponents(row, angularVelocity[i]);
+                    AddVectorComponents(row, localPosition[i]);
 
                     info.Add(row);
                 }
@@ -245,6 +248,10 @@ namespace Experior.Plugin.Joints.Recorder
                 "Angular Velocity (X)",
                 "Angular Velocity (Y)",
                 "Angular Velocity (Z)",
+
+                "Local Position (X)",
+                "Local Position (Y)",
+                "Local Position (Z)"
             };
         }
 

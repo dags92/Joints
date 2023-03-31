@@ -1,5 +1,6 @@
 using Experior.Catalog.Joints.Assemblies.Basic;
 using Experior.Catalog.Joints.Assemblies.Mechanisms;
+using Experior.Catalog.Joints.Assemblies.Robotics;
 using Experior.Core.Assemblies;
 using PhysX;
 
@@ -80,6 +81,34 @@ namespace Experior.Catalog.Joints
             };
 
             var assembly = new SliderCrankInverted(info);
+            return assembly;
+        }
+
+        public static Assembly MovablePendulum(string title, string subtitle, object properties)
+        {
+            var info = new MovablePendulumInfo()
+            {
+                name = Experior.Core.Assemblies.Assembly.GetValidName("Movable Pendulum"),
+                height = 3f
+            };
+
+            var assembly = new MovablePendulum(info);
+            return assembly;
+        }
+
+        #endregion
+
+        #region Robotics
+
+        public static Assembly BasicGripper(string title, string subtitle, object properties)
+        {
+            var info = new BasicGripperInfo()
+            {
+                name = Experior.Core.Assemblies.Assembly.GetValidName("Basic Gripper"),
+                height = 3f
+            };
+
+            var assembly = new BasicGripper(info);
             return assembly;
         }
 

@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Numerics;
 using System.Windows.Media;
 using System.Xml.Serialization;
+using Experior.Core.Mathematics;
 using PhysX;
 
 namespace Experior.Catalog.Joints.Assemblies
@@ -88,6 +89,23 @@ namespace Experior.Catalog.Joints.Assemblies
             return link > _links.Count ? Vector3.Zero : _links[link].LinkDynamic.AngularVelocity;
         }
 
+        public Vector3 GetLinkLocalPosition(int link)
+        {
+            if (_links.Count < link)
+            {
+                return Vector3.Zero;
+            }
+
+            Trigonometry.GlobalToLocal(Position, Orientation, _links[link].LinkDynamic.Position, _links[link].LinkDynamic.Orientation, out var pos, out var ori);
+
+            return pos;
+        }
+
+        public Vector3 GetLinkGlobalPosition(int link)
+        {
+            return link > _links.Count ? Vector3.Zero : _links[link].LinkDynamic.Position;
+        }
+
         #endregion
 
         #region Protected Methods
@@ -96,7 +114,13 @@ namespace Experior.Catalog.Joints.Assemblies
 
         protected abstract void CreateJoints();
 
-        protected abstract void ConfigureJoints();
+        protected virtual void ConfigureJoints()
+        {
+            foreach (var joint in Joints)
+            {
+                joint.Constraint.Flags |= ConstraintFlag.Visualization;
+            }
+        }
 
         #endregion
 
@@ -107,6 +131,7 @@ namespace Experior.Catalog.Joints.Assemblies
             Experior.Core.Environment.InvokeIfRequired(() =>
             {
                 CreateLinks();
+                ConfigureLinks();
 
                 Experior.Core.Environment.InvokePhysicsAction(() =>
                 {
@@ -114,6 +139,15 @@ namespace Experior.Catalog.Joints.Assemblies
                     ConfigureJoints();
                 });
             });
+        }
+
+        protected virtual void ConfigureLinks()
+        {
+            foreach (var link in Links)
+            {
+                link.LinkDynamic.Part.MinPositionIterations = 20;
+                link.LinkDynamic.Part.MinVelocityIterations = 5;
+            }
         }
 
         #endregion
