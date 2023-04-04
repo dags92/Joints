@@ -121,8 +121,8 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
             // Links:
             const float linkL = 0.025f;
 
-            Links.Add(new Link(Load.CreateBox(linkL, linkL, 0.4f, Colors.Gray), false));
-            Links.Add(new Link(Load.CreateBox(linkL, linkL, 0.8f, Colors.DarkGray), false));
+            Links.Add(new Link(Load.CreateBox(linkL, linkL, 0.2f, Colors.Gray), false));
+            Links.Add(new Link(Load.CreateBox(linkL, linkL, 0.4f, Colors.DarkGray), false));
             Links.Add(new Link(Load.CreateBox(0.05f, 0.05f, 0.05f, Colors.LightGray), false));
 
             // Piston chamber:
