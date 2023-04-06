@@ -106,14 +106,14 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
                 Trigonometry.GlobalToLocal(Position, Orientation, Links[3].LinkDynamic.Position,
                     Links[3].LinkDynamic.Orientation, out var pos, out var ori);
 
-                if (_motor.Command == AuxiliaryData.Commands.Forward)
+                if (_motor.Command == Actuators.AuxiliaryData.Commands.Forward)
                 {
                     if (pos.Z <= -1f)
                     {
                         _motor.SwitchDirection();
                     }
                 }
-                else if (_motor.Command == AuxiliaryData.Commands.Backward)
+                else if (_motor.Command == Actuators.AuxiliaryData.Commands.Backward)
                 {
                     if (pos.Z >= -0.5f)
                     {

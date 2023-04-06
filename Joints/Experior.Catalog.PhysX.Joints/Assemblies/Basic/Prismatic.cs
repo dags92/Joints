@@ -1,36 +1,29 @@
-﻿using System;
-using System.ComponentModel;
+﻿using Experior.Core.Loads;
+using PhysX;
+using System;
 using System.Numerics;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Xml.Serialization;
-using Experior.Catalog.Joints.Actuators.Motors;
-using Experior.Core.Loads;
 using Experior.Core.Properties;
-using PhysX;
-using Colors = System.Windows.Media.Colors;
-using Environment = Experior.Core.Environment;
+using System.ComponentModel;
+using System.Windows.Input;
 
 namespace Experior.Catalog.Joints.Assemblies.Basic
 {
-    public class Revolute : Base
+    public class Prismatic : Base
     {
         #region Fields
 
-        private readonly RevoluteInfo _info;
-
-        private readonly Rotative _motor;
+        private readonly PrismaticInfo _info;
 
         #endregion
 
         #region Constructor
 
-        public Revolute(RevoluteInfo info) : base(info)
+        public Prismatic(PrismaticInfo info)
+            : base(info)
         {
             _info = info;
-
-            _motor = Rotative.Create();
-            Add(_motor);
         }
 
         #endregion
@@ -38,21 +31,8 @@ namespace Experior.Catalog.Joints.Assemblies.Basic
         #region Public Properties
 
         [Category("Motion")]
-        [DisplayName("Type")]
-        [PropertyOrder(0)]
-        public AuxiliaryData.RevoluteDriveTypes DriveType
-        {
-            get => _info.Drive;
-            set
-            {
-                _info.Drive = value;
-                Rebuild();
-            }
-        }
-
-        [Category("Motion")]
         [DisplayName("Enable Limits")]
-        [PropertyOrder(1)]
+        [PropertyOrder(0)]
         public bool EnableLimits
         {
             get => _info.EnableLimits;
@@ -67,7 +47,7 @@ namespace Experior.Catalog.Joints.Assemblies.Basic
 
         [Category("Motion")]
         [DisplayName("Lower Limit")]
-        [PropertyOrder(2)]
+        [PropertyOrder(1)]
         [PropertyAttributesProvider("DynamicLimits")]
         public float LowerLimit
         {
@@ -86,7 +66,7 @@ namespace Experior.Catalog.Joints.Assemblies.Basic
 
         [Category("Motion")]
         [DisplayName("Upper Limit")]
-        [PropertyOrder(3)]
+        [PropertyOrder(2)]
         [PropertyAttributesProvider("DynamicLimits")]
         public float UpperLimit
         {
@@ -105,7 +85,7 @@ namespace Experior.Catalog.Joints.Assemblies.Basic
 
         [Category("Motion")]
         [DisplayName("Stiffness")]
-        [PropertyOrder(4)]
+        [PropertyOrder(3)]
         [PropertyAttributesProvider("DynamicLimits")]
         public float Stiffness
         {
@@ -119,7 +99,7 @@ namespace Experior.Catalog.Joints.Assemblies.Basic
 
         [Category("Motion")]
         [DisplayName("Damping")]
-        [PropertyOrder(5)]
+        [PropertyOrder(4)]
         [PropertyAttributesProvider("DynamicLimits")]
         public float Damping
         {
@@ -133,39 +113,27 @@ namespace Experior.Catalog.Joints.Assemblies.Basic
 
         public override string Category => "Basic Joints";
 
-        public override ImageSource Image => Common.Icon.Get("Revolute");
+        public override ImageSource Image => Common.Icon.Get("Prismatic");
 
         #endregion
 
         #region Public Methods
 
-        public override void Step(float deltatime)
+        public override void KeyDown(KeyEventArgs e)
         {
-            _motor.Step(deltatime);
-
-            if (Joints[0] is RevoluteJoint revolute && DriveType == AuxiliaryData.RevoluteDriveTypes.Motorized)
+            if (e.Key == Key.A)
             {
-                revolute.DriveVelocity = _motor.CurrentSpeed;
+                Experior.Core.Environment.InvokeIfRequired(() =>
+                {
+                    Links[1].LinkDynamic.AddForce(new Vector3(100f, 0f, 0f));
+                });
             }
         }
 
-        public override void KeyDown(KeyEventArgs e)
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public void DynamicLimits(PropertyAttributes attributes)
         {
-            switch (e.Key)
-            {
-                case Key.A:
-
-                    if (_motor.Running)
-                    {
-                        _motor.Stop();
-                    }
-                    else
-                    {
-                        _motor.Start();
-                    }
-
-                    return;
-            }
+            attributes.IsBrowsable = _info.EnableLimits;
         }
 
         #endregion
@@ -175,22 +143,20 @@ namespace Experior.Catalog.Joints.Assemblies.Basic
         protected override void CreateLinks()
         {
             Links.Add(new Link(Load.CreateBox(0.1f, 0.1f, 0.1f, Colors.DarkRed), true));
-            Links.Add(new Link(Load.CreateBox(0.025f, 0.025f, 0.4f, Colors.Gray), false));
+            Links.Add(new Link(Load.CreateBox(0.3f, 0.01f, 0.3f, Colors.Gray), false));
 
             Links[0].LinkDynamic.Position = Position + new Vector3(0, -0.5f, 0);
-            Links[1].LinkDynamic.Position = Links[0].LinkDynamic.Position + new Vector3(-Links[0].LinkDynamic.Length / 2 - Links[1].LinkDynamic.Length / 2, 0, -Links[1].LinkDynamic.Width / 2 + 0.02f);
+            Links[1].LinkDynamic.Position = Links[0].LinkDynamic.Position;
 
             LinkId.Add("Motor");
-            LinkId.Add("Rod");
+            LinkId.Add("Platform");
         }
 
         protected override void CreateJoints()
         {
-            Links[1].RelativeLocalFrame = Matrix4x4.CreateTranslation(Links[0].LinkDynamic.Length / 2 + Links[1].LinkDynamic.Length / 2, 0, -Links[1].LinkDynamic.Width / 2 + Links[0].LinkDynamic.Width / 2);
+            Joints.Add(Core.Environment.Scene.PhysXScene.CreateJoint(JointType.Prismatic, Links[0].LinkActor, Links[0].JointLocalFrame, Links[1].LinkActor, Links[1].RelativeLocalFrame));
 
-            Joints.Add(Environment.Scene.PhysXScene.CreateJoint(JointType.Revolute, Links[0].LinkActor, Links[0].JointLocalFrame, Links[1].LinkActor, Links[1].RelativeLocalFrame));
-            
-            Joints[0].Name = "Revolute";
+            Joints[0].Name = "Prismatic";
             JointId.Add(Joints[0].Name);
         }
 
@@ -206,24 +172,21 @@ namespace Experior.Catalog.Joints.Assemblies.Basic
 
         private void UpdateDrive()
         {
-            if (!(Joints[0] is RevoluteJoint revolute))
+            if (!(Joints[0] is PrismaticJoint prismatic))
             {
                 return;
             }
-            
-            revolute.Flags = Utilities.GetRevoluteJointFlag(DriveType);
-            revolute.Limit = new JointAngularLimitPair(LowerLimit, UpperLimit, new Spring(Stiffness, Damping));
-            revolute.DriveGearRatio = 1;
+
+            prismatic.Flag = EnableLimits ? PrismaticJointFlag.LimitEnabled : 0;
+            prismatic.Limit = new JointLinearLimitPair(LowerLimit, UpperLimit, new Spring(Stiffness, Damping));
         }
 
         #endregion
     }
 
-    [Serializable, XmlInclude(typeof(RevoluteInfo)), XmlType(TypeName = "Experior.Catalog.Joints.Assemblies.Basic.RevoluteInfo")]
-    public class RevoluteInfo : BaseInfo
+    [Serializable, XmlInclude(typeof(PrismaticInfo)), XmlType(TypeName = "Experior.Catalog.Joints.Assemblies.Basic.PrismaticInfo")]
+    public class PrismaticInfo : BaseInfo
     {
-        public AuxiliaryData.RevoluteDriveTypes Drive { get; set; }
-
         public bool EnableLimits { get; set; } = false;
 
         public float LowerLimit { get; set; } = -1f;

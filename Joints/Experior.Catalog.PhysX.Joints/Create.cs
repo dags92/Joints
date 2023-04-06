@@ -2,7 +2,6 @@ using Experior.Catalog.Joints.Assemblies.Basic;
 using Experior.Catalog.Joints.Assemblies.Mechanisms;
 using Experior.Catalog.Joints.Assemblies.Robotics;
 using Experior.Core.Assemblies;
-using PhysX;
 
 namespace Experior.Catalog.Joints
 {
@@ -25,6 +24,54 @@ namespace Experior.Catalog.Joints
             };
 
             var assembly = new Revolute(info);
+            return assembly;
+        }
+
+        public static Assembly Prismatic(string title, string subtitle, object properties)
+        {
+            var info = new PrismaticInfo()
+            {
+                name = Experior.Core.Assemblies.Assembly.GetValidName("Prismatic"),
+                height = 3f
+            };
+
+            var assembly = new Prismatic(info);
+            return assembly;
+        }
+
+        public static Assembly Fixed(string title, string subtitle, object properties)
+        {
+            var info = new FixedInfo()
+            {
+                name = Experior.Core.Assemblies.Assembly.GetValidName("Fixed"),
+                height = 3f
+            };
+
+            var assembly = new Fixed(info);
+            return assembly;
+        }
+
+        public static Assembly Spherical(string title, string subtitle, object properties)
+        {
+            var info = new SphericalInfo()
+            {
+                name = Experior.Core.Assemblies.Assembly.GetValidName("Spherical"),
+                height = 3f
+            };
+
+            var assembly = new Spherical(info);
+            return assembly;
+        }
+
+        public static Assembly Distance(string title, string subtitle, object properties)
+        {
+            var info = new DistanceInfo()
+            {
+                name = Experior.Core.Assemblies.Assembly.GetValidName("Distance"),
+                height = 3f
+            };
+
+            var assembly = new Distance(info);
             return assembly;
         }
 
