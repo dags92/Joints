@@ -199,7 +199,7 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
             Joints.Add(Environment.Scene.PhysXScene.CreateJoint(JointType.D6, Links[4].LinkActor, Links[4].JointLocalFrame, Links[3].LinkActor, Links[3].RelativeLocalFrame));
 
             Joints[0].Name = "D6";
-            Joints[1].Name = "Revolute";
+            Joints[1].Name = "Twist";
             Joints[2].Name = "Spherical";
             Joints[3].Name = "Prismatic";
 

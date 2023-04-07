@@ -94,7 +94,7 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
             Joints.Add(Core.Environment.Scene.PhysXScene.CreateJoint(JointType.Revolute, Links[1].LinkActor, Links[1].JointLocalFrame, Links[2].LinkActor, Links[2].RelativeLocalFrame));
 
             Joints[0].Name = "D6-Prismatic";
-            Joints[1].Name = "Revolute";
+            Joints[1].Name = "Twist";
 
             foreach (var temp in Joints)
             {

@@ -21,7 +21,7 @@ namespace Experior.Catalog.Joints
 
             #region Basic Joints
 
-            Add(Common.Icon.Get("Slider-Crank"), "Basic Joints", "Revolute", Simulation, Create.Revolute);
+            Add(Common.Icon.Get("Slider-Crank"), "Basic Joints", "Twist", Simulation, Create.Revolute);
             Add(Common.Icon.Get("Slider-Crank"), "Basic Joints", "Prismatic", Simulation, Create.Prismatic);
             Add(Common.Icon.Get("Slider-Crank"), "Basic Joints", "Fixed", Simulation, Create.Fixed);
             Add(Common.Icon.Get("Slider-Crank"), "Basic Joints", "Spherical", Simulation, Create.Spherical);
@@ -32,8 +32,12 @@ namespace Experior.Catalog.Joints
 
             #region D6 Joints
 
-            Add(Common.Icon.Get("Slider-Crank"), "D6 Joints", "Revolute", Simulation, Create.D6Revolute);
             Add(Common.Icon.Get("Slider-Crank"), "D6 Joints", "Prismatic", Simulation, Create.D6Prismatic);
+            Add(Common.Icon.Get("Slider-Crank"), "D6 Joints", "Twist", Simulation, Create.D6Twist);
+            Add(Common.Icon.Get("Slider-Crank"), "D6 Joints", "Swing 1", Simulation, Create.D6Swing1);
+            Add(Common.Icon.Get("Slider-Crank"), "D6 Joints", "Swing 2", Simulation, Create.D6Swing2);
+            Add(Common.Icon.Get("Slider-Crank"), "D6 Joints", "Isotropic", Simulation, Create.D6Isotropic);
+            Add(Common.Icon.Get("Slider-Crank"), "D6 Joints", "Universal", Simulation, Create.D6Universal);
 
             #endregion
 

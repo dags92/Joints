@@ -206,7 +206,7 @@ namespace Experior.Catalog.Joints.Assemblies.Basic
         {
             Joints.Add(Core.Environment.Scene.PhysXScene.CreateJoint(JointType.Revolute, Links[0].LinkActor, Links[0].JointLocalFrame, Links[1].LinkActor, Links[1].RelativeLocalFrame));
 
-            Joints[0].Name = "Revolute";
+            Joints[0].Name = "Twist";
             JointId.Add(Joints[0].Name);
 
             SetLocalFrames();

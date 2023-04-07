@@ -19,7 +19,7 @@ namespace Experior.Catalog.Joints
         {
             var info = new RevoluteInfo()
             {
-                name = Experior.Core.Assemblies.Assembly.GetValidName("Revolute"),
+                name = Experior.Core.Assemblies.Assembly.GetValidName("Twist"),
                 height = 3f
             };
 
@@ -91,15 +91,63 @@ namespace Experior.Catalog.Joints
 
         #region D6 Joints
 
-        public static Assembly D6Revolute(string title, string subtitle, object properties)
+        public static Assembly D6Twist(string title, string subtitle, object properties)
         {
-            var info = new Assemblies.D6.RevoluteInfo()
+            var info = new Assemblies.D6.TwistInfo()
             {
-                name = Experior.Core.Assemblies.Assembly.GetValidName("D6 - Revolute"),
+                name = Experior.Core.Assemblies.Assembly.GetValidName("D6 - Twist"),
                 height = 3f
             };
 
-            var assembly = new Assemblies.D6.Revolute(info);
+            var assembly = new Assemblies.D6.Twist(info);
+            return assembly;
+        }
+
+        public static Assembly D6Swing1(string title, string subtitle, object properties)
+        {
+            var info = new Assemblies.D6.Swing1Info()
+            {
+                name = Experior.Core.Assemblies.Assembly.GetValidName("D6 - Swing1 - "),
+                height = 3f
+            };
+
+            var assembly = new Assemblies.D6.Swing1(info);
+            return assembly;
+        }
+
+        public static Assembly D6Swing2(string title, string subtitle, object properties)
+        {
+            var info = new Assemblies.D6.Swing2Info()
+            {
+                name = Experior.Core.Assemblies.Assembly.GetValidName("D6 - Swing2 - "),
+                height = 3f
+            };
+
+            var assembly = new Assemblies.D6.Swing2(info);
+            return assembly;
+        }
+
+        public static Assembly D6Isotropic(string title, string subtitle, object properties)
+        {
+            var info = new Assemblies.D6.IsotropicJointInfo()
+            {
+                name = Experior.Core.Assemblies.Assembly.GetValidName("D6 - Isotropic"),
+                height = 3f
+            };
+
+            var assembly = new Assemblies.D6.IsotropicJoint(info);
+            return assembly;
+        }
+
+        public static Assembly D6Universal(string title, string subtitle, object properties)
+        {
+            var info = new Assemblies.D6.UniversalJointInfo()
+            {
+                name = Experior.Core.Assemblies.Assembly.GetValidName("D6 - Universal"),
+                height = 3f
+            };
+
+            var assembly = new Assemblies.D6.UniversalJoint(info);
             return assembly;
         }
 

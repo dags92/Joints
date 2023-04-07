@@ -133,7 +133,7 @@ namespace Experior.Catalog.Joints.Assemblies.Basic
 
         public override string Category => "Basic Joints";
 
-        public override ImageSource Image => Common.Icon.Get("Revolute");
+        public override ImageSource Image => Common.Icon.Get("Twist");
 
         #endregion
 
@@ -190,7 +190,7 @@ namespace Experior.Catalog.Joints.Assemblies.Basic
 
             Joints.Add(Environment.Scene.PhysXScene.CreateJoint(JointType.Revolute, Links[0].LinkActor, Links[0].JointLocalFrame, Links[1].LinkActor, Links[1].RelativeLocalFrame));
             
-            Joints[0].Name = "Revolute";
+            Joints[0].Name = "Twist";
             JointId.Add(Joints[0].Name);
         }
 
@@ -219,7 +219,7 @@ namespace Experior.Catalog.Joints.Assemblies.Basic
         #endregion
     }
 
-    [Serializable, XmlInclude(typeof(RevoluteInfo)), XmlType(TypeName = "Experior.Catalog.Joints.Assemblies.Basic.RevoluteInfo")]
+    [Serializable, XmlInclude(typeof(RevoluteInfo)), XmlType(TypeName = "Experior.Catalog.Joints.Assemblies.Basic.TwistInfo")]
     public class RevoluteInfo : BaseInfo
     {
         public AuxiliaryData.RevoluteDriveTypes Drive { get; set; }
