@@ -26,6 +26,7 @@ namespace Experior.Catalog.Joints
             Add(Common.Icon.Get("Slider-Crank"), "Basic Joints", "Fixed", Simulation, Create.Fixed);
             Add(Common.Icon.Get("Slider-Crank"), "Basic Joints", "Spherical", Simulation, Create.Spherical);
             Add(Common.Icon.Get("Slider-Crank"), "Basic Joints", "Distance", Simulation, Create.Distance);
+            Add(Common.Icon.Get("Slider-Crank"), "Basic Joints", "Pose", Simulation, Create.Pose);
 
             #endregion
 

@@ -75,6 +75,18 @@ namespace Experior.Catalog.Joints
             return assembly;
         }
 
+        public static Assembly Pose(string title, string subtitle, object properties)
+        {
+            var info = new PoseInfo()
+            {
+                name = Experior.Core.Assemblies.Assembly.GetValidName("Pose-Test"),
+                height = 3f
+            };
+
+            var assembly = new Pose(info);
+            return assembly;
+        }
+
         #endregion
 
         #region D6 Joints
