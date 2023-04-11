@@ -155,7 +155,7 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
                 Experior.Core.Environment.InvokeIfRequired(() => _motorBox.LocalPitch += _motor.CurrentSpeed * deltatime);
             }
             
-            SliderPositionOutput.Send((double)GetLinkGlobalPosition(3).Z);
+            SliderPositionOutput.Send((double)GetLinkLocalPosition(3).Z);
 
         }
 
