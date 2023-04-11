@@ -13,6 +13,7 @@ using Colors = System.Windows.Media.Colors;
 using Environment = Experior.Core.Environment;
 using Experior.Core.Properties;
 using System.ComponentModel;
+using Experior.Core.Communication.PLC;
 using Experior.Core.Mathematics;
 
 namespace Experior.Catalog.Joints.Assemblies.Mechanisms
@@ -40,6 +41,17 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
 
             _motor = Rotative.Create();
             Add(_motor);
+
+            if (_info.PositionInput == null)
+            {
+                PositionInput = new Input()
+                {
+                    SymbolName = "Position Input",
+                    DataSize = DataSize.LREAL
+                };
+            }
+
+            Add(PositionInput);
         }
 
         #endregion
@@ -89,6 +101,21 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
 
         public override ImageSource Image => Common.Icon.Get("Slider-Crank");
 
+        [Category("Motion")]
+        [DisplayName("Position Input")]
+        public Input PositionInput
+        {
+            get => _info.PositionInput;
+            set => _info.PositionInput = value;
+        }
+        [Category("Motion")]
+        [DisplayName("Control with position")]
+        public bool ControlWithPosition
+        {
+            get => _info.ControlWithPosition;
+            set => _info.ControlWithPosition = value;
+        }
+
         #endregion
 
         #region Public Methods
@@ -106,11 +133,15 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
         {
             _motor.Step(deltatime);
 
-
-            if (_motor.On)
+            if (ControlWithPosition)
+            {
+                Experior.Core.Environment.InvokeIfRequired(() => _motorBox.LocalPitch = float.Parse(PositionInput.Value.ToString()));
+            }
+            else if (_motor.On)
             {
                 Experior.Core.Environment.InvokeIfRequired(() => _motorBox.LocalPitch += _motor.CurrentSpeed * deltatime);
             }
+
         }
 
         
@@ -256,5 +287,9 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
         public float Stiffness { get; set; } = 1f;
 
         public float Damping { get; set; } = 10000f;
+
+        public Input PositionInput {get; set; } 
+
+        public bool ControlWithPosition { get; set; }
     }
 }
