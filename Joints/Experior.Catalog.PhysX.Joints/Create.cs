@@ -1,4 +1,5 @@
 using Experior.Catalog.Joints.Assemblies.Basic;
+using Experior.Catalog.Joints.Assemblies.Materials;
 using Experior.Catalog.Joints.Assemblies.Mechanisms;
 using Experior.Catalog.Joints.Assemblies.Robotics;
 using Experior.Core.Assemblies;
@@ -216,6 +217,25 @@ namespace Experior.Catalog.Joints
             };
 
             var assembly = new BasicGripper(info);
+            return assembly;
+        }
+
+        #endregion
+
+        #region Loads
+
+        public static Assembly Deformable(string title, string subtitle, object properties)
+        {
+            var info = new DeformableInfo()
+            {
+                name = Experior.Core.Assemblies.Assembly.GetValidName("Deformable"),
+                length = 0.25f,
+                width = 0.25f,
+                BoxHeight = 0.25f,
+                height = 3f
+            };
+
+            var assembly = new Deformable(info);
             return assembly;
         }
 

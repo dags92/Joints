@@ -54,6 +54,12 @@ namespace Experior.Catalog.Joints
             Add(Common.Icon.Get("Slider-Crank"), "Robotics", "Basic Gripper", Simulation, Create.BasicGripper);
 
             #endregion
+
+            #region Materials
+
+            Add(Common.Icon.Get("Slider-Crank"), "Materials", "Deformable", Simulation, Create.Deformable);
+
+            #endregion
         }
 
         #endregion
