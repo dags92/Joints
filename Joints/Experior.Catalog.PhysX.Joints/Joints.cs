@@ -47,6 +47,7 @@ namespace Experior.Catalog.Joints
             Add(Common.Icon.Get("Slider-Crank"), "Mechanisms", "Slider-Crank Inverted", Simulation, Create.SliderCrankInverted);
             Add(Common.Icon.Get("Slider-Crank"), "Mechanisms", "Movable Pendulum", Simulation, Create.MovablePendulum);
             Add(Common.Icon.Get("Slider-Crank Kinematic"), "Mechanisms", "Slider-Crank Kinematic motor", Simulation, Create.SliderCrankKinematic);
+            Add(Common.Icon.Get("Slider-Crank Kinematic 2"), "Mechanisms", "Slider-Crank Kinematic motor 2", Simulation, Create.SliderCrankKinematic2);
 
             #endregion
 
