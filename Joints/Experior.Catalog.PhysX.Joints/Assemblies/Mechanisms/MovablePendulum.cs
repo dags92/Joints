@@ -7,6 +7,9 @@ using System.Numerics;
 using System.Windows.Media;
 using System.Xml.Serialization;
 using Experior.Catalog.Joints.Actuators.Motors;
+using Experior.Core.Properties;
+using System.ComponentModel;
+using Experior.Core.Properties.TypeConverter;
 
 namespace Experior.Catalog.Joints.Assemblies.Mechanisms
 {
@@ -33,6 +36,20 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
         #endregion
 
         #region Public Properties
+
+        [Category("Parameters")]
+        [DisplayName("Center Of Mass")]
+        [PropertyOrder(0)]
+        [TypeConverter(typeof(Vector3MeterToMillimeter))]
+        public Vector3 CenterOfMass
+        {
+            get => _info.CenterOfMass;
+            set
+            {
+                _info.CenterOfMass = value;
+                UpdateLinkConfiguration();
+            }
+        }
 
         public override string Category => "Mechanisms";
 
@@ -133,10 +150,20 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
         }
 
         #endregion
+
+        #region Private Methods
+
+        private void UpdateLinkConfiguration()
+        {
+            Links[2].LinkDynamic.CenterOfMassOffsetLocalPosition = CenterOfMass;
+        }
+
+        #endregion
     }
 
     [Serializable, XmlInclude(typeof(MovablePendulumInfo)), XmlType(TypeName = "Experior.Catalog.Joints.Assemblies.Mechanisms.MovablePendulumInfo")]
     public class MovablePendulumInfo : BaseInfo
     {
+        public Vector3 CenterOfMass { get; set; } = Vector3.Zero;
     }
 }
