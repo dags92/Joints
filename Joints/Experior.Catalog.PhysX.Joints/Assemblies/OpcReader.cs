@@ -107,7 +107,7 @@ namespace Experior.Catalog.Joints.Assemblies
 
         public Vector3 GetLinkLocalPosition(int link)
         {
-            return link > PlcLinkValues.Count ? Vector3.Zero : Vector3.UnitZ * (float)PlcLinkValues[link].Value;
+            return link > PlcLinkValues.Count ? Vector3.Zero : Vector3.UnitZ * float.Parse(PlcLinkValues[link].Value.ToString());
         }
 
         public Vector3 GetLinkGlobalPosition(int link)
@@ -133,7 +133,8 @@ namespace Experior.Catalog.Joints.Assemblies
                     {
                         newItem.DataSize = InputDataSize;
                         newItem.SymbolName = $"Input Value {inputs.IndexOf(newItem)}";
-
+                        JointId.Add(newItem.SymbolName+" Joint");
+                        LinkId.Add(newItem.SymbolName+ " Link");
                         Add(newItem);
                     }
                     break;
@@ -142,6 +143,8 @@ namespace Experior.Catalog.Joints.Assemblies
                     foreach (var oldItem in e.OldItems.OfType<Input>())
                     {
                         Remove(oldItem);
+                        JointId.Remove(oldItem.SymbolName + " Joint");
+                        LinkId.Remove(oldItem.SymbolName + " Link");
                         oldItem.Dispose();
                     }
                     break;
