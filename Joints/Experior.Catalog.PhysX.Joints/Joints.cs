@@ -46,6 +46,12 @@ namespace Experior.Catalog.Joints
             Add(Common.Icon.Get("Slider-Crank"), "Robotics", "Basic Gripper", Simulation, Create.BasicGripper);
 
             #endregion
+
+            #region Communication
+
+            Add(Common.Icon.Get("OpcReader"), "Mechanisms", "OPC Reader", Simulation, Create.OpcReader);
+
+            #endregion
         }
 
         #endregion

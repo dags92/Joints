@@ -1,3 +1,4 @@
+using Experior.Catalog.Joints.Assemblies;
 using Experior.Catalog.Joints.Assemblies.Basic;
 using Experior.Catalog.Joints.Assemblies.Mechanisms;
 using Experior.Catalog.Joints.Assemblies.Robotics;
@@ -123,6 +124,22 @@ namespace Experior.Catalog.Joints
             var assembly = new BasicGripper(info);
             return assembly;
         }
+
+        #endregion
+
+        #region Communication
+
+        public static Assembly OpcReader()
+        {
+            var info = new OpcReaderInfo()
+            {
+                name = Experior.Core.Assemblies.Assembly.GetValidName("OPC Reader")
+            };
+
+            var assembly = new OpcReader(info);
+            return assembly;
+        }
+        
 
         #endregion
     }
