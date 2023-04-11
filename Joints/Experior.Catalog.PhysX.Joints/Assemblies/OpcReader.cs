@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Numerics;
@@ -11,6 +13,7 @@ using Experior.Core.Assemblies;
 using Experior.Core.Communication.PLC;
 using Experior.Core.Parts;
 using Experior.Core.Routes;
+using Experior.Interfaces;
 using PhysX;
 
 namespace Experior.Catalog.Joints.Assemblies
@@ -32,13 +35,16 @@ namespace Experior.Catalog.Joints.Assemblies
         public string Name { get; } = "OPC Reader";
         public List<string> JointId { get; } = new List<string>();
         public List<string> LinkId { get; } = new List<string>();
+        [Category("Input"),
+        DisplayName("New Input Data Size")]
+        public DataSize InputDataSize { get; set; } = DataSize.LREAL;
 
         [Category("Input"),
         DisplayName("PLC Joint Values")]
-        public List<Input> PlcJointValues
+        public ObservableCollection<Input> PlcLinkValues
         {
-            get => _info.PlcJointValues;
-            set => _info.PlcJointValues = value;
+            get => _info.PlcLinkValues;
+            set => _info.PlcLinkValues = value;
         }
 
         #endregion
@@ -50,7 +56,21 @@ namespace Experior.Catalog.Joints.Assemblies
             _info = info;
 
             _visualizationBox = new Box(Colors.DarkRed, 0.5f, 0.5f, 0.5f);
+            Add(_visualizationBox);
+
+            if (_info != null)
+            {
+                foreach (var plcJointValue in PlcLinkValues)
+                {
+                    Add(plcJointValue);
+                }
+            }
+
+            PlcLinkValues.CollectionChanged += PlcValues_CollectionChanged;
+
         }
+
+        
 
         #endregion
         #region Public Methods
@@ -87,7 +107,7 @@ namespace Experior.Catalog.Joints.Assemblies
 
         public Vector3 GetLinkLocalPosition(int link)
         {
-            return link > PlcJointValues.Count ? Vector3.Zero : Vector3.UnitZ * (float)PlcJointValues[link].Value;
+            return link > PlcLinkValues.Count ? Vector3.Zero : Vector3.UnitZ * (float)PlcLinkValues[link].Value;
         }
 
         public Vector3 GetLinkGlobalPosition(int link)
@@ -101,12 +121,44 @@ namespace Experior.Catalog.Joints.Assemblies
         }
 
         #endregion
+
+        #region Private Methods
+        private void PlcValues_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if(!(sender is ObservableCollection<Input> inputs)) return;
+            switch (e.Action)
+            {
+                case NotifyCollectionChangedAction.Add:
+                    foreach (var newItem in e.NewItems.OfType<Input>())
+                    {
+                        newItem.DataSize = InputDataSize;
+                        newItem.SymbolName = $"Input Value {inputs.IndexOf(newItem)}";
+
+                        Add(newItem);
+                    }
+                    break;
+
+                case NotifyCollectionChangedAction.Remove:
+                    foreach (var oldItem in e.OldItems.OfType<Input>())
+                    {
+                        Remove(oldItem);
+                        oldItem.Dispose();
+                    }
+                    break;
+                default:
+                    Log.Write(e.Action.ToString()+" Collection event not handled");
+                    return;
+            }
+        }
+
+
+        #endregion
     }
 
     [Serializable, XmlInclude(typeof(OpcReaderInfo)),
      XmlType(TypeName = "Experior.Catalog.Joints.Assemblies.OpcReaderInfo")]
     public class OpcReaderInfo : AssemblyInfo
     {
-        public List<Input> PlcJointValues = new List<Input>();
+        public ObservableCollection<Input> PlcLinkValues = new ObservableCollection<Input>();
     }
 }
