@@ -13,25 +13,28 @@ using Colors = System.Windows.Media.Colors;
 using Environment = Experior.Core.Environment;
 using Experior.Core.Properties;
 using System.ComponentModel;
+using Experior.Core.Mathematics;
 
 namespace Experior.Catalog.Joints.Assemblies.Mechanisms
 {
     /// <summary>
     /// Class <c>SliderCrank</c> depicts the dynamics of a slider-crank mechanism using D6 and Basic joints from PhysX 3.4.1
     /// </summary>
-    public class SliderCrank : Base
+    public class SliderCrankKinematic : Base
     {
         #region Fields
 
-        private readonly SliderCrankInfo _info;
+        private readonly SliderCrankKinematicInfo _info;
 
         private readonly Actuators.Motors.Rotative _motor;
+
+        private Experior.Core.Parts.Box _motorBox;
 
         #endregion
 
         #region Constructor
 
-        public SliderCrank(SliderCrankInfo info) : base(info)
+        public SliderCrankKinematic(SliderCrankKinematicInfo info) : base(info)
         {
             _info = info;
 
@@ -103,11 +106,14 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
         {
             _motor.Step(deltatime);
 
-            if (Joints[0] is D6Joint jointD6)
+
+            if (_motor.On)
             {
-                jointD6.DriveAngularVelocity = new Vector3(_motor.CurrentSpeed, 0, 0);
+                Experior.Core.Environment.InvokeIfRequired(() => _motorBox.LocalPitch += _motor.CurrentSpeed * deltatime);
             }
         }
+
+        
 
         #endregion
 
@@ -116,8 +122,10 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
         protected override void CreateLinks()
         {
             // Motor:
-            Links.Add(new Link(Load.CreateBox(0.1f, 0.1f, 0.1f, Colors.DarkRed), true));
-
+            Links.Add(new Link(Load.CreateBox(0.05f, 0.05f, 0.05f, Colors.DarkRed), true));
+            _motorBox = new Core.Parts.Box(Colors.Red, 0.1f, 0.1f, 0.1f);
+            _motorBox.Rigid = true;
+            Add(_motorBox);
             // Links:
             const float linkL = 0.025f;
 
@@ -161,8 +169,8 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
             }
 
             // Definition of Joint Local Frames and Relative Local Frames:
-
-            Links[1].RelativeLocalFrame = Matrix4x4.CreateTranslation(Links[0].LinkDynamic.Length / 2 + Links[1].LinkDynamic.Length / 2, 0, -Links[1].LinkDynamic.Width / 2);
+            //Links[0].JointLocalFrame = Matrix4x4.CreateFromYawPitchRoll(-90f.ToRadians(), 0, 0);
+            Links[1].RelativeLocalFrame = Matrix4x4.CreateTranslation(_motorBox.Length / 2 + Links[1].LinkDynamic.Length / 2, 0, -Links[1].LinkDynamic.Width / 2);
 
             Links[1].JointLocalFrame = Matrix4x4.CreateTranslation(new Vector3(0, 0, Links[1].LinkDynamic.Width / 2));
 
@@ -174,16 +182,16 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
 
             // Creation of Joints:
 
-            Joints.Add(Environment.Scene.PhysXScene.CreateJoint(JointType.D6, Links[0].LinkActor, Links[0].JointLocalFrame, Links[1].LinkActor, Links[1].RelativeLocalFrame));
+            Joints.Add(Environment.Scene.PhysXScene.CreateJoint(JointType.Fixed, _motorBox.Actor, Links[0].JointLocalFrame, Links[1].LinkActor, Links[1].RelativeLocalFrame));
 
             Joints.Add(Environment.Scene.PhysXScene.CreateJoint(JointType.Revolute, Links[1].LinkActor, Links[1].JointLocalFrame, Links[2].LinkActor, Links[2].RelativeLocalFrame));
 
             Joints.Add(Environment.Scene.PhysXScene.CreateJoint(JointType.Spherical, Links[2].LinkActor, Links[2].JointLocalFrame, Links[3].LinkActor, Links[3].RelativeLocalFrame));
 
             Joints.Add(Environment.Scene.PhysXScene.CreateJoint(JointType.Prismatic, Links[4].LinkActor, Links[4].JointLocalFrame, Links[3].LinkActor, Links[3].RelativeLocalFrame));
-
-            Joints[0].Name = "D6";
-            Joints[1].Name = "Twist";
+            
+            Joints[0].Name = "Fixed";
+            Joints[1].Name = "Revolute";
             Joints[2].Name = "Spherical";
             Joints[3].Name = "Prismatic";
 
@@ -229,14 +237,19 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
                     d6.SetMotion(D6Axis.Twist, D6Motion.Free);
                     d6.SetDrive(D6Drive.Twist, new D6JointDrive(Stiffness, Damping, float.MaxValue, Acceleration));
                 }
+
+                //if (Joints[0] is PhysX.RevoluteJoint rev)
+                //{
+                //    rev.Flags = RevoluteJointFlag.DriveEnabled;
+                //}
             });
         }
 
         #endregion
     }
 
-    [Serializable, XmlInclude(typeof(SliderCrankInfo)), XmlType(TypeName = "Experior.Catalog.PhysX.Joints.Assemblies.Mechanisms.SliderCrankInfo")]
-    public class SliderCrankInfo : BaseInfo
+    [Serializable, XmlInclude(typeof(SliderCrankInfo)), XmlType(TypeName = "Experior.Catalog.PhysX.Joints.Assemblies.Mechanisms.SliderCrankKinematicInfo")]
+    public class SliderCrankKinematicInfo : BaseInfo
     {
         public bool Acceleration { get; set; } = true;
 

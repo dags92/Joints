@@ -1,3 +1,4 @@
+using Experior.Catalog.Joints.Assemblies;
 using Experior.Catalog.Joints.Assemblies.Basic;
 using Experior.Catalog.Joints.Assemblies.Materials;
 using Experior.Catalog.Joints.Assemblies.Mechanisms;
@@ -180,6 +181,18 @@ namespace Experior.Catalog.Joints
             return assembly;
         }
 
+        public static Assembly SliderCrankKinematic(string title, string subtitle, object properties)
+        {
+            var info = new SliderCrankKinematicInfo()
+            {
+                name = Experior.Core.Assemblies.Assembly.GetValidName("Slider Crank"),
+                height = 3f
+            };
+
+            var assembly = new SliderCrankKinematic(info);
+            return assembly;
+        }
+
         public static Assembly SliderCrankInverted(string title, string subtitle, object properties)
         {
             var info = new SliderCrankInvertedInfo()
@@ -221,7 +234,7 @@ namespace Experior.Catalog.Joints
         }
 
         #endregion
-
+        
         #region Loads
 
         public static Assembly Deformable(string title, string subtitle, object properties)
@@ -238,7 +251,21 @@ namespace Experior.Catalog.Joints
             var assembly = new Deformable(info);
             return assembly;
         }
+       
+        #endregion
+        
+        #region Communication
 
+        public static Assembly OpcReader()
+        {
+            var info = new OpcReaderInfo()
+            {
+                name = Experior.Core.Assemblies.Assembly.GetValidName("OPC Reader")
+            };
+
+            var assembly = new OpcReader(info);
+            return assembly;
+        }
         #endregion
     }
 }
