@@ -46,12 +46,19 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
             {
                 PositionInput = new Input()
                 {
-                    SymbolName = "Position Input",
+                    SymbolName = "Crank Position",
+                    DataSize = DataSize.LREAL
+                };
+
+                SliderPositionOutput = new Output()
+                {
+                    SymbolName = "Slider Position",
                     DataSize = DataSize.LREAL
                 };
             }
 
             Add(PositionInput);
+            Add(SliderPositionOutput);
         }
 
         #endregion
@@ -102,7 +109,7 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
         public override ImageSource Image => Common.Icon.Get("Slider-Crank");
 
         [Category("Motion")]
-        [DisplayName("Position Input")]
+        [DisplayName("Position Output")]
         public Input PositionInput
         {
             get => _info.PositionInput;
@@ -114,6 +121,12 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
         {
             get => _info.ControlWithPosition;
             set => _info.ControlWithPosition = value;
+        }
+
+        public Output SliderPositionOutput
+        {
+            get => _info.SliderPositionOutput;
+            set => _info.SliderPositionOutput = value;
         }
 
         #endregion
@@ -141,6 +154,8 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
             {
                 Experior.Core.Environment.InvokeIfRequired(() => _motorBox.LocalPitch += _motor.CurrentSpeed * deltatime);
             }
+            
+            SliderPositionOutput.Send((double)GetLinkGlobalPosition(3).Z);
 
         }
 
@@ -201,7 +216,7 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
 
             // Definition of Joint Local Frames and Relative Local Frames:
             //Links[0].JointLocalFrame = Matrix4x4.CreateFromYawPitchRoll(-90f.ToRadians(), 0, 0);
-            Links[1].RelativeLocalFrame = Matrix4x4.CreateTranslation(_motorBox.Length / 2 + Links[1].LinkDynamic.Length / 2, 0, -Links[1].LinkDynamic.Width / 2);
+            Links[1].RelativeLocalFrame = Matrix4x4.CreateTranslation(_motorBox.Length / 2, 0, -Links[1].LinkDynamic.Width / 2);
 
             Links[1].JointLocalFrame = Matrix4x4.CreateTranslation(new Vector3(-(_motorBox.Length / 2 + Links[1].LinkDynamic.Length / 2), 0, Links[1].LinkDynamic.Width));
 
@@ -289,6 +304,8 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
         public float Damping { get; set; } = 10000f;
 
         public Input PositionInput {get; set; } 
+
+        public Output SliderPositionOutput { get; set; }
 
         public bool ControlWithPosition { get; set; }
     }
