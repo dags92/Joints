@@ -167,8 +167,8 @@ namespace Experior.Catalog.Joints.Assemblies.Robotics
             Joints.Add(Core.Environment.Scene.PhysXScene.CreateJoint(JointType.D6, Links[1].LinkActor, leftJointFrame, Links[3].LinkActor, Links[3].RelativeLocalFrame));
 
             Joints[0].Name = "Prismatic";
-            Joints[1].Name = "Revolute";
-            Joints[2].Name = "Revolute";
+            Joints[1].Name = "Twist";
+            Joints[2].Name = "Twist";
 
             foreach (var temp in Joints)
             {

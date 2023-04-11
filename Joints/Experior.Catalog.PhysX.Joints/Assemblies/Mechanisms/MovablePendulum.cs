@@ -7,7 +7,6 @@ using System.Numerics;
 using System.Windows.Media;
 using System.Xml.Serialization;
 using Experior.Catalog.Joints.Actuators.Motors;
-using Experior.Core.Mathematics;
 
 namespace Experior.Catalog.Joints.Assemblies.Mechanisms
 {
@@ -60,12 +59,14 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
         protected override void CreateLinks()
         {
             Links.Add(new Link(Load.CreateBox(0.1f, 0.1f, 0.1f, Colors.DarkRed), true));
-            Links.Add(new Link(Load.CreateBox(0.3f, 0.1f, 0.3f, Colors.DarkSlateGray), false));
-            Links.Add(new Link(Load.CreateBox(0.05f, 0.8f, 0.05f, Colors.Yellow), false));
+            Links.Add(new Link(Load.Create(Common.Mesh.Get("Motor.dae")), false));
+            Links.Add(new Link(new Core.Loads.Mesh(Common.Mesh.Get("Rod520.dae")), false));
 
             Links[0].LinkDynamic.Position = Position;
-            Links[1].LinkDynamic.Position = Links[0].LinkDynamic.Position;
-            Links[2].LinkDynamic.Position = Links[1].LinkDynamic.Position + new Vector3(-Links[1].LinkDynamic.Length / 2 - Links[2].LinkDynamic.Length / 2, -Links[2].LinkDynamic.Height / 2 + 0.01f, 0);
+            Links[1].LinkDynamic.Position = Position + new Vector3(0, 0, -0.5f);
+            Links[2].LinkDynamic.Position = Links[1].LinkDynamic.Position;
+
+            Links[1].LinkDynamic.Color = Colors.SlateGray;
 
             foreach (var temp in Links)
             {
@@ -73,9 +74,9 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
                 temp.LinkDynamic.UserDeletable = false;
             }
 
+            LinkId.Add("Static Box");
             LinkId.Add("Motor");
-            LinkId.Add("Platform");
-            LinkId.Add("Bar-1");
+            LinkId.Add("Pendulum");
         }
 
         protected override void CreateJoints()
@@ -86,16 +87,14 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
                 return;
             }
 
-            Links[1].JointLocalFrame = Matrix4x4.CreateTranslation(new Vector3(0, 0, 0));
-
-            Links[2].RelativeLocalFrame = Matrix4x4.CreateTranslation(new Vector3(Links[1].LinkDynamic.Length / 2 + Links[2].LinkDynamic.Length / 2, Links[2].LinkDynamic.Height / 2 - 0.01f, 0));
-
+            Links[0].JointLocalFrame = Matrix4x4.CreateTranslation(new Vector3(0, 0, 0.5f));
+            Links[2].RelativeLocalFrame = Matrix4x4.CreateTranslation(new Vector3(Links[2].LinkDynamic.Length / 2 + Links[1].LinkDynamic.Length / 2 - 0.02f, Links[2].LinkDynamic.Height / 2 - 0.01f, 0));
+            
             Joints.Add(Core.Environment.Scene.PhysXScene.CreateJoint(JointType.D6, Links[0].LinkActor, Links[0].JointLocalFrame, Links[1].LinkActor, Links[1].RelativeLocalFrame));
-
             Joints.Add(Core.Environment.Scene.PhysXScene.CreateJoint(JointType.Revolute, Links[1].LinkActor, Links[1].JointLocalFrame, Links[2].LinkActor, Links[2].RelativeLocalFrame));
 
             Joints[0].Name = "D6-Prismatic";
-            Joints[1].Name = "Revolute";
+            Joints[1].Name = "Twist";
 
             foreach (var temp in Joints)
             {
@@ -108,7 +107,10 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
             var count = 0;
             foreach (var item in Joints)
             {
-                item.ConstraintFlags |= ConstraintFlag.Visualization;
+                if (count != 0)
+                {
+                    item.ConstraintFlags |= ConstraintFlag.Visualization;
+                }
 
                 if (count == 0)
                 {

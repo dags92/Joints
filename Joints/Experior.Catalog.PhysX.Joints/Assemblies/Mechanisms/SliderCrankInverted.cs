@@ -106,14 +106,14 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
                 Trigonometry.GlobalToLocal(Position, Orientation, Links[3].LinkDynamic.Position,
                     Links[3].LinkDynamic.Orientation, out var pos, out var ori);
 
-                if (_motor.Command == AuxiliaryData.Commands.Forward)
+                if (_motor.Command == Actuators.AuxiliaryData.Commands.Forward)
                 {
                     if (pos.Z <= -1f)
                     {
                         _motor.SwitchDirection();
                     }
                 }
-                else if (_motor.Command == AuxiliaryData.Commands.Backward)
+                else if (_motor.Command == Actuators.AuxiliaryData.Commands.Backward)
                 {
                     if (pos.Z >= -0.5f)
                     {
@@ -199,7 +199,7 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
             Joints.Add(Environment.Scene.PhysXScene.CreateJoint(JointType.D6, Links[4].LinkActor, Links[4].JointLocalFrame, Links[3].LinkActor, Links[3].RelativeLocalFrame));
 
             Joints[0].Name = "D6";
-            Joints[1].Name = "Revolute";
+            Joints[1].Name = "Twist";
             Joints[2].Name = "Spherical";
             Joints[3].Name = "Prismatic";
 

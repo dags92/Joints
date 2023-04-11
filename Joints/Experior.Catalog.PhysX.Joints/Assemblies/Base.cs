@@ -7,9 +7,15 @@ using System.Windows.Media;
 using System.Xml.Serialization;
 using Experior.Core.Mathematics;
 using PhysX;
+using Experior.Interfaces;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace Experior.Catalog.Joints.Assemblies
 {
+    /// <summary>
+    /// Class <c>Base</c> provides the fundamental class members to build a Mechanism composed by PhysX joints.
+    /// </summary>
     public abstract class Base : Assembly, IMechanism
     {
         #region Fields
@@ -33,11 +39,24 @@ namespace Experior.Catalog.Joints.Assemblies
 
         #endregion
 
+        #region Delegates
+
+        public delegate void MechanismBuilt(List<Link> l, List<Joint> j);
+
+        #endregion
+
+        #region Events
+
+        public event MechanismBuilt BuiltDone;
+
+        #endregion
+
         #region Public Properties
 
         [Browsable(false)]
         public List<string> JointId { get; } = new List<string>();
 
+        [Browsable(false)]
         public List<string> LinkId { get; } = new List<string>();
 
         #endregion
@@ -56,6 +75,12 @@ namespace Experior.Catalog.Joints.Assemblies
         {
             base.Inserted();
 
+            Build();
+        }
+
+        public void Rebuild()
+        {
+            Experior.Core.Environment.Invoke(RemoveAll);
             Build();
         }
 
@@ -124,6 +149,20 @@ namespace Experior.Catalog.Joints.Assemblies
 
         protected abstract void CreateLinks();
 
+        protected virtual void ConfigureLinks()
+        {
+            foreach (var link in Links)
+            {
+                link.LinkDynamic.Deletable = false;
+                link.LinkDynamic.UserDeletable = false;
+
+                link.LinkDynamic.Part.MinPositionIterations = 20;
+                link.LinkDynamic.Part.MinVelocityIterations = 5;
+
+                link.LinkDynamic.SleepThreshold = 0f;
+            }
+        }
+
         protected abstract void CreateJoints();
 
         protected virtual void ConfigureJoints()
@@ -140,26 +179,54 @@ namespace Experior.Catalog.Joints.Assemblies
 
         private void Build()
         {
-            Experior.Core.Environment.InvokeIfRequired(() =>
+            Experior.Core.Environment.Invoke(() =>
             {
                 CreateLinks();
                 ConfigureLinks();
 
                 Experior.Core.Environment.InvokePhysicsAction(() =>
                 {
+                    if (!VerifyActors())
+                    {
+                        return; 
+                    }
+
                     CreateJoints();
                     ConfigureJoints();
                 });
+
+                BuiltDone?.Invoke(Links, Joints);
             });
         }
 
-        protected virtual void ConfigureLinks()
+        private void RemoveAll()
         {
             foreach (var link in Links)
             {
-                link.LinkDynamic.Part.MinPositionIterations = 20;
-                link.LinkDynamic.Part.MinVelocityIterations = 5;
+                Experior.Core.Loads.Load.Items.Remove(link.LinkDynamic);
+                link.LinkDynamic?.Dispose();
             }
+            Links.Clear();
+
+            Experior.Core.Environment.InvokePhysicsAction(() =>
+            {
+                foreach (var joint in Joints)
+                {
+                    joint.Dispose();
+                }
+                Joints.Clear();
+            });
+        }
+
+        private bool VerifyActors()
+        {
+            if (Links.Any(a => a.LinkActor == null))
+            {
+                Log.Write("Physics Engine Action has not been invoked properly", Colors.Red, LogFilter.Error);
+                return false;
+            }
+
+            return true;
         }
 
         #endregion
