@@ -2,6 +2,7 @@ using Experior.Catalog.Joints.Assemblies;
 using Experior.Catalog.Joints.Assemblies.Basic;
 using Experior.Catalog.Joints.Assemblies.Materials;
 using Experior.Catalog.Joints.Assemblies.Mechanisms;
+using Experior.Catalog.Joints.Assemblies.Mechanisms.Test;
 using Experior.Catalog.Joints.Assemblies.Robotics;
 using Experior.Core.Assemblies;
 

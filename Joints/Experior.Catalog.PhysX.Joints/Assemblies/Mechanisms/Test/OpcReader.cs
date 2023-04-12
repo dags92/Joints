@@ -16,7 +16,7 @@ using Experior.Core.Routes;
 using Experior.Interfaces;
 using PhysX;
 
-namespace Experior.Catalog.Joints.Assemblies
+namespace Experior.Catalog.Joints.Assemblies.Mechanisms.Test
 {
     public class OpcReader : Assembly, IMechanism
     {
@@ -24,7 +24,7 @@ namespace Experior.Catalog.Joints.Assemblies
 
         private OpcReaderInfo _info;
 
-        private Experior.Core.Parts.Box _visualizationBox;
+        private Box _visualizationBox;
 
         #endregion
 
@@ -70,7 +70,7 @@ namespace Experior.Catalog.Joints.Assemblies
 
         }
 
-        
+
 
         #endregion
         #region Public Methods
@@ -123,9 +123,9 @@ namespace Experior.Catalog.Joints.Assemblies
         #endregion
 
         #region Private Methods
-        private void PlcValues_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void PlcValues_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if(!(sender is ObservableCollection<Input> inputs)) return;
+            if (!(sender is ObservableCollection<Input> inputs)) return;
             switch (e.Action)
             {
                 case NotifyCollectionChangedAction.Add:
@@ -133,8 +133,8 @@ namespace Experior.Catalog.Joints.Assemblies
                     {
                         newItem.DataSize = InputDataSize;
                         newItem.SymbolName = $"Input Value {inputs.IndexOf(newItem)}";
-                        JointId.Add(newItem.SymbolName+" Joint");
-                        LinkId.Add(newItem.SymbolName+ " Link");
+                        JointId.Add(newItem.SymbolName + " Joint");
+                        LinkId.Add(newItem.SymbolName + " Link");
                         Add(newItem);
                     }
                     break;
@@ -149,7 +149,7 @@ namespace Experior.Catalog.Joints.Assemblies
                     }
                     break;
                 default:
-                    Log.Write(e.Action.ToString()+" Collection event not handled");
+                    Log.Write(e.Action.ToString() + " Collection event not handled");
                     return;
             }
         }
@@ -159,7 +159,7 @@ namespace Experior.Catalog.Joints.Assemblies
     }
 
     [Serializable, XmlInclude(typeof(OpcReaderInfo)),
-     XmlType(TypeName = "Experior.Catalog.Joints.Assemblies.OpcReaderInfo")]
+     XmlType(TypeName = "Experior.Catalog.Joints.Assemblies.Mechanisms.Test.OpcReaderInfo")]
     public class OpcReaderInfo : AssemblyInfo
     {
         public ObservableCollection<Input> PlcLinkValues = new ObservableCollection<Input>();

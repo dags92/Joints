@@ -16,7 +16,7 @@ using System.ComponentModel;
 using Experior.Core.Communication.PLC;
 using Experior.Core.Mathematics;
 
-namespace Experior.Catalog.Joints.Assemblies.Mechanisms
+namespace Experior.Catalog.Joints.Assemblies.Mechanisms.Test
 {
     /// <summary>
     /// Class <c>SliderCrank</c> depicts the dynamics of a slider-crank mechanism using D6 and Basic joints from PhysX 3.4.1
@@ -27,9 +27,9 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
 
         private readonly SliderCrankKinematicInfo _info;
 
-        private readonly Actuators.Motors.Rotative _motor;
+        private readonly Rotative _motor;
 
-        private Experior.Core.Parts.Box _motorBox;
+        private Core.Parts.Box _motorBox;
 
         #endregion
 
@@ -126,7 +126,7 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
 
             Log.Write($"Slider-Crank Mechanism \n" +
                       $"1. Drive is located on the Crank \n" +
-                      $"2. Use the PLC signals Forward or Backward to move the mechanism", System.Windows.Media.Colors.LimeGreen, LogFilter.Communication);
+                      $"2. Use the PLC signals Forward or Backward to move the mechanism", Colors.LimeGreen, LogFilter.Communication);
         }
 
         public override void Step(float deltatime)
@@ -135,16 +135,16 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
 
             if (ControlWithPosition)
             {
-                Experior.Core.Environment.InvokeIfRequired(() => _motorBox.LocalPitch = float.Parse(PositionInput.Value.ToString()));
+                Environment.InvokeIfRequired(() => _motorBox.LocalPitch = float.Parse(PositionInput.Value.ToString()));
             }
             else if (_motor.On)
             {
-                Experior.Core.Environment.InvokeIfRequired(() => _motorBox.LocalPitch += _motor.CurrentSpeed * deltatime);
+                Environment.InvokeIfRequired(() => _motorBox.LocalPitch += _motor.CurrentSpeed * deltatime);
             }
 
         }
 
-        
+
 
         #endregion
 
@@ -220,7 +220,7 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
             Joints.Add(Environment.Scene.PhysXScene.CreateJoint(JointType.Spherical, Links[2].LinkActor, Links[2].JointLocalFrame, Links[3].LinkActor, Links[3].RelativeLocalFrame));
 
             Joints.Add(Environment.Scene.PhysXScene.CreateJoint(JointType.Prismatic, Links[4].LinkActor, Links[4].JointLocalFrame, Links[3].LinkActor, Links[3].RelativeLocalFrame));
-            
+
             Joints[0].Name = "Fixed";
             Joints[1].Name = "Revolute";
             Joints[2].Name = "Spherical";
@@ -261,9 +261,9 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
 
         private void UpdateDrive()
         {
-            Experior.Core.Environment.InvokeIfRequired(() =>
+            Environment.InvokeIfRequired(() =>
             {
-                if (Joints[0] is PhysX.D6Joint d6)
+                if (Joints[0] is D6Joint d6)
                 {
                     d6.SetMotion(D6Axis.Twist, D6Motion.Free);
                     d6.SetDrive(D6Drive.Twist, new D6JointDrive(Stiffness, Damping, float.MaxValue, Acceleration));
@@ -279,7 +279,7 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
         #endregion
     }
 
-    [Serializable, XmlInclude(typeof(SliderCrankInfo)), XmlType(TypeName = "Experior.Catalog.PhysX.Joints.Assemblies.Mechanisms.SliderCrankKinematicInfo")]
+    [Serializable, XmlInclude(typeof(SliderCrankInfo)), XmlType(TypeName = "Experior.Catalog.PhysX.Joints.Assemblies.Mechanisms.Test.SliderCrankKinematicInfo")]
     public class SliderCrankKinematicInfo : BaseInfo
     {
         public bool Acceleration { get; set; } = true;
@@ -288,7 +288,7 @@ namespace Experior.Catalog.Joints.Assemblies.Mechanisms
 
         public float Damping { get; set; } = 10000f;
 
-        public Input PositionInput {get; set; } 
+        public Input PositionInput { get; set; }
 
         public bool ControlWithPosition { get; set; }
     }
